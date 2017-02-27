@@ -1,6 +1,7 @@
 = Fluent iterable Java 8
 :published_at: 2017-02-27
 
+
 == 1) Introduction
 
 L'API open source Guava de Google propose une classe "FluentIterable", permettant d'effectuer des traitements sur une liste, via une API fonctionnelle. 
@@ -23,9 +24,7 @@ Nous n'allons pas réinventer la roue, mais plutôt montrer, via un design basé
 
 Voici le code la classe FluentIterable :
 
-[[app-listing]]
 [source,java]
-.app.rb
 ----
 /**
  * Wrapper that allows to do many operation on a given {@link List}, with fluent style builder
