@@ -5,6 +5,7 @@
     "branch": "master"
   },
   "theme": {
-    "name": "uno"
+    "name": "uno",
+    "url":"//tosun-si.github.io/themes/uno"
   }
 }
