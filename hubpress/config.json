@@ -4,8 +4,13 @@
     "repositoryName": "tosun-si.github.io",
     "branch": "master"
   },
+  "site": {
+    "title": "Mazlum TOSUN BLOG"
+  },
+  "socialnetwork": {
+    "email": "mazlum.tosun@gmail.com"
+  },
   "theme": {
-    "name": "uno",
-    "url":"//tosun-si.github.io/themes/uno"
+    "name": "uno"
   }
 }
