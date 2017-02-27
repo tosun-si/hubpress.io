@@ -1,6 +1,5 @@
 = Fluent iterable Java 8
 :published_at: 2017-02-27
-:source-highlighter: hightlightjs
 
 == 1) Introduction
 
