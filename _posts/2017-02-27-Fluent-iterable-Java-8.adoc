@@ -1,0 +1,232 @@
+= Fluent iterable Java 8
+:published_at: 2017-02-27
+
+== 1) Introduction
+
+L'API open source Guava de Google propose une classe "FluentIterable", permettant d'effectuer des traitements sur une liste, via une API fonctionnelle. 
+
+Le but de cet article est de montrer comment refaire un "fluent iterable", avec les fonctions par défaut proposées par le JDK 8.
+
+Seuls les traitements de filtre et de transformation, seront proposés dans cet article.
+
+Avec Java 8, il est plus simple d'effectuer des designs orientés fonctionnels, avec l'apport des lambdas expression et des accès par référence de méthode.
+
+En effet les classes anonymes (ou statiques), permettaient déjà de faire du design fonctionnel, cependant l'écriture était assez verbeuse.
+
+Les lambdas apportent beaucoup plus de lisibilité et permettent de faire du "behavior parameterization", avec plus de simplicité et de lisibilité (ce terme signifie qu'il est possible d'appliquer des comportements à des traitements, via des blocs de code).
+
+L'API Stream proposée par défaut dans Java 8 permet de refaire simplement, les cas présentés dans cet article. En effet, cette API permet de faire les opérations de type "map, filter, reduce".
+
+Nous n'allons pas réinventer la roue, mais plutôt montrer, via un design basé sur les lambdas, comment effectuer des opérations sur une liste, de façon fluide et chaînée (design pattern builder).
+
+== 2) Classe FluentIterable
+
+Voici le code la classe FluentIterable :
+
+[source,java]
+----
+/**
+ * Wrapper that allows to do many operation on a given {@link List}, with fluent style builder
+ * pattern.
+ * 
+ * @author Mazlum
+ * @param <T> current type of wrapped list
+ */
+public final class FluentIterable<T> {
+
+  // Fields.
+
+  private List<T> list;
+
+  // Constructors.
+
+  /**
+   * Private constructor.
+   */
+  private FluentIterable(final List<T> list) {
+    this.list = list;
+  }
+
+  /**
+   * Static factory method that allows to instantiate {@link FluentIterable} from a given list.
+   * 
+   * @param fromList from list
+   * @return current {@link FluentIterable} with from list
+   */
+  public static <T> FluentIterable<T> from(final List<T> fromList) {
+
+    // Checks if given list is not null.
+    Objects.requireNonNull(fromList);
+
+    // Returns instance of fluent iterable with given list.
+    return new FluentIterable<>(fromList);
+  }
+
+  // Builder methods.
+
+  /**
+   * Allows to filter list with a {@link Predicate}. This {@link Predicate} allows to apply
+   * "behavior parameterization" strategy.
+   * 
+   * @param filter current filter
+   * @return current {@link FluentIterable}
+   */
+  public FluentIterable<T> filter(final Predicate<? super T> filter) {
+
+    // Filters current list by given predicate.
+    final List<T> filteredList = new ArrayList<>();
+    this.list.forEach(t -> {
+      if (filter.test(t)) {
+        filteredList.add(t);
+      }
+    });
+
+    // Returns new instance of fluent iterable with filtered list.
+    return from(filteredList);
+  }
+
+  /**
+   * Allows to transform list to other, with a {@link Function} (mapper). This {@link Function}
+   * allows to apply "behavior parameterization" strategy.
+   * 
+   * @param mapper current mapper function
+   * @return current {@link FluentIterable}
+   */
+  public <U> FluentIterable<U> transform(final Function<? super T, ? extends U> mapper) {
+
+    // Build transformed list by given function.
+    final List<U> transformedList = new ArrayList<>();
+    this.list.forEach(t -> transformedList.add(mapper.apply(t)));
+
+    // Returns new instance of fluent iterable with transformed list.
+    return from(transformedList);
+  }
+
+  // Result build method.
+
+  /**
+   * Allows to return result list.
+   * 
+   * @return result list
+   */
+  public List<T> toList() {
+    return this.list;
+  }
+}
+----
+
+=== a) La méthode filter
+
+La méthode "filter" prend en paramètre un "Predicate", qui est une interface fonctionnelle. En effet le JDK 8 propose par défaut un ensemble d'interfaces fonctionnelles. Une interface fonctionnelle n'est autre qu'une interface, avec une seule méthode abstraite.
+
+Ces interfaces sont vues comme des fonctions.
+
+Ce type d'interface permet d'apporter l'implémentation de la seule méthode abstraite, via une lambda expression. En effet, il suffit que la lambda ait la même signature que la fonction, pour que l'implémentation soit acceptée à la compilation (type checking).
+
+La fonction Predicate prend en paramètre un objet et retourne un boolean, il faut donc que la lambda qui sert d'implémentation respecte cette signature.
+
+Ainsi via cette lambda, on pourra passer un bloc de code à la méthode filter, qui permettra de faire un test se basant sur un objet en entrée, et retournant un boolean en sortie.
+
+L'implémentation de la méthode filter, permet donc de filtrer la liste en entrée, en récupérant seulement les éléments, qui satisfont la condition attendue par le Predicate.
+
+=== b) La méthode transform
+
+La méthode "transform" prend en paramètre une "Function". Comme pour le Predicate, une Function est une interface fonctionnelle, qui prend en paramètre un objet et retourne un autre objet.
+
+Cette signature correspond parfaitement à une méthode de transformation classique.
+
+Même principe que pour la partie filter,  la lambda servant d'implémentation doit respecter cette signature.
+
+L'implémentation de la méthode transform construit une liste d'objets destination, à partir de la liste d'objets source.
+
+Le design pattern builder permet de chaîner les opérations afin d'arriver au résultat final (fluent style), c'est-à-dire la liste résultante des opérations souhaitées.
+
+== 3) Un main pour les tests
+
+Voici le code de la classe TestFluentIterable contenant une méthode "main" :
+
+[source,java]
+----
+/**
+ * Allows to test treatments about fluent iterable.
+ * 
+ * @author Mazlum
+ */
+public class TestFluentIterable {
+
+  /**
+   * Allows to test treatments about fluent iterable.
+   * 
+   * @param args arguments
+   */
+  public static void main(String[] args) {
+
+    final Person person1 = new Person();
+    person1.setLastName("Zizou");
+    person1.setFirstName("Mazizou");
+    person1.setAge(20);
+
+    final Person person2 = new Person();
+    person2.setLastName("Zorro");
+    person2.setFirstName("Roronoa");
+    person2.setAge(21);
+
+    final Person person3 = new Person();
+    person3.setLastName("Motta");
+    person3.setFirstName("Thiago");
+    person3.setAge(22);
+
+    // Build persons list.
+    final List<Person> persons = Arrays.asList(person1, person2, person3);
+
+    // Filters and transforms persons to users, with fluent iterable.
+    final List<User> usersWithFluentIterable = FluentIterable.from(persons)
+        .filter(p -> p.getAge() > 20).transform(TestFluentIterable::toUser).toList();
+
+    // Same operation with stream API.
+    final List<User> usersWithStream = persons.stream().filter(p -> p.getAge() > 20)
+        .map(TestFluentIterable::toUser).collect(Collectors.toList());
+
+    System.out.println("User transform with fluent iterable result : " + usersWithFluentIterable);
+    System.out.println("User transform with stream API result : " + usersWithStream);
+  }
+
+  /**
+   * Allows to map {@link Person} to {@link User}.
+   * 
+   * @param person current person
+   * @return {@link User} by given {@link Person}
+   */
+  private static User toUser(final Person person) {
+    final User user = new User();
+    user.setLastName(person.getLastName());
+    user.setFirstName(person.getFirstName());
+    user.setAge(person.getAge());
+
+    return user;
+  }
+}
+----
+
+=== a) Appel à la méthode filter
+
+Dans la partie précédente, nous avions indiqué que la méthode filter prenait en paramètre un "Predicate"; et que ce Predicate pouvait accepter une lambda expression prenant en paramètre un objet et retournant un boolean.
+
+C'est le cas avec cette lambda : "p -> p.getAge() > 20". La méthode filter peut être appelée de la manière suivante : "filter(p -> p.getAge() > 20)" (permet de récupérer toutes les personnes qui ont un âge supérieur à 20).
+
+=== b) Appel à la méthode transform
+
+La méthode transform, quant à elle, prend en paramètre une "Function". Cette "Function" accepte une lambda ou une méthode qui prend en paramètre un objet et retourne un autre objet.
+
+Pour cet exemple, un accès "par référence de méthode", a été privilégié pour gagner en lisibilité.
+
+Le principe de l'accès à une méthode par référence suit le même principe qu'une lambda. Il suffit que la méthode implémentée ait la même signature que la méthode abstraite de l'interface fonctionnelle.
+
+Une méthode est donc ajoutée, prenant en paramètre un objet "Person", et retournant un objet "User" (un mapper).
+
+Ainsi, il est possible d'appeler la méthode transform de la manière suivante : "transform(TestFluentIterable::toUser)"
+
+En conclusion, l'appel à la méthode "toList" retourne la liste correspondant au résultat final.
+
+
+Le code de cet article est disponible sous le github suivant : https://github.com/tosun-si/tosun-si/blob/master/projetTestJava8
