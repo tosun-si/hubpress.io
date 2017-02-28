@@ -24,7 +24,7 @@ Nous n'allons pas réinventer la roue, mais plutôt montrer, via un design basé
 
 Voici le code la classe FluentIterable :
 
-[source,java]
+[source,javascript]
 ----
 /**
  * Wrapper that allows to do many operation on a given {@link List}, with fluent style builder
