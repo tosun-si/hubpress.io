@@ -8,7 +8,12 @@
     "title": "Mazlum TOSUN BLOG"
   },
   "socialnetwork": {
-    "email": "mazlum.tosun@gmail.com"
+    "email": "mazlum.tosun@gmail.com",
+    "twitter": "https://twitter.com/MazlumTosun3",
+    "googleplus": "https://plus.google.com/107222582194830665741?hl=en-US",
+    "linkedin": "https://www.linkedin.com/in/mazlum-tosun-900b1812/",
+    "facebook": "https://www.facebook.com/mazlum.tosun.16",
+    "github": "https://github.com/tosun-si"
   },
   "theme": {
     "name": "my-uno"
