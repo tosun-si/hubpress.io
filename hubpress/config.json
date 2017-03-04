@@ -6,7 +6,8 @@
   },
   "site": {
     "title": "Mazlum TOSUN BLOG",
-    "cover": "/images/my_background.jpg"
+    "cover": "/images/my_background.jpg",
+    "disqus": "Mazlum"
   },
   "socialnetwork": {
     "email": "mazlum.tosun@gmail.com",
