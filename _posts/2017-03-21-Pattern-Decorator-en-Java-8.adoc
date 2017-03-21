@@ -7,10 +7,11 @@
 L'objectif de cette article est de parler d'un des pattern du GOF (gang of four) assez connu, qui est le decorator.
 Ce patron de conception correspond à un design pattern de type comportement (behavioural pattern).
 
-En gros l'idée de ce pattern est d'ajouter du comportement à du code au runtime (à l'execution du code).
+En gros l'idée de ce pattern est d'ajouter du comportement à du code au runtime (c'est à dire à l'execution du code).
 Ce pattern présente de nombreux avantages car lorsque la conception a été mise en place, il devient très simple d'ajouter du comportement au code existant, ce qui le rend très evolutif.
 
 Avant Java 8, malgré l'aspect interessant évoqué précédement, ce pattern n'était pas beaucoup utilisé car le code nécessaire à sa mise en place était très verbeux.
+En effet le design de code était basé sur l'héritage, ce qui obligeait le développeur à écrire une interface par décorator, assez qu'une classe abstraite. La verbosité induite par ce type de dévéloppement pouvait décourager pas mal de développeur.
 
 
 == 2) Classe FluentIterable
