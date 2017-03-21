@@ -5,6 +5,12 @@
 == 1) Introduction
 
 L'objectif de cette article est de parler d'un des pattern du GOF (gang of four) assez connu, qui est le decorator.
+Ce patron de conception correspond à un design pattern de type comportement (behavioural pattern).
+
+En gros l'idée de ce pattern est d'ajouter du comportement à du code au runtime (à l'execution du code).
+Ce pattern présente de nombreux avantages car lorsque la conception a été mise en place, il devient très simple d'ajouter du comportement au code existant, ce qui le rend très evolutif.
+
+
 
 == 2) Classe FluentIterable
 
