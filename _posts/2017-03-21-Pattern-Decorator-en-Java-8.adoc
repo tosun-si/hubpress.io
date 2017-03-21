@@ -15,7 +15,7 @@ En effet le design de code était basé sur l'héritage, ce qui obligeait le dé
 
 En Java 8 avec l'apport des lambdas, nous allons montrer que le decorator est beaucoup plus simple à implémenter, moins verbeux, fonctionnel et plus lisible pour le client de l'API.
 
-L'article se décompose en 2 partie, l'une consistant à montrer le code et la conception du decorator avant et après Java 8.
+L'article se décompose en 2 partie consistant à montrer le code et la conception du decorator avant et après Java 8.
 
 
 == 2) Classe FluentIterable
