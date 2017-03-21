@@ -21,7 +21,11 @@ L'exemple choisi pour illustrer ce pattern, est le calcul du bénéfice d'une en
 
 == 2) Decorator en Java 7
 
-Voici le code la classe FluentIterable :
+Premièrement une interface définissant le contrat doit être créée, nous allons l'appeler ProfitCalculator (calculateur de bénéfice). Voici le code de cette interface : 
 
 [source,java]
 ----
+public interface ProfitCalculator {
+
+  double calculate(double turnover);
+}  
