@@ -32,3 +32,5 @@ public interface ProfitCalculator {
 ----
 
 Un calculateur de profit dispose d'une méthode abstraite "calculate", qui va appliquer un nouveau calcul au CA passé en paramètre.
+
+Ensuite il faut créer une classe abstraite
