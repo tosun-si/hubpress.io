@@ -30,3 +30,5 @@ public interface ProfitCalculator {
   double calculate(double turnover);
 }  
 ----
+
+Un calculateur de profit dispose d'une méthode abstraite "calculate", qui va appliquer un nouveau calcul au CA passé en paramètre.
