@@ -13,6 +13,10 @@ Ce pattern présente de nombreux avantages car lorsque la conception a été mis
 Avant Java 8, malgré l'aspect interessant évoqué précédement, ce pattern n'était pas beaucoup utilisé car le code nécessaire à sa mise en place était très verbeux.
 En effet le design de code était basé sur l'héritage, ce qui obligeait le développeur à écrire une interface par décorator, assez qu'une classe abstraite. La verbosité induite par ce type de dévéloppement pouvait décourager pas mal de développeur.
 
+En Java 8 avec l'apport des lambdas, nous allons montrer que le decorator est beaucoup plus simple à implémenter, moins verbeux, fonctionnel et plus lisible pour le client de l'API.
+
+L'article se décompose en 2 partie, l'une consistant à montrer le code et la conception du decorator avant et après Java 8.
+
 
 == 2) Classe FluentIterable
 
