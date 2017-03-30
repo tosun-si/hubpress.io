@@ -60,3 +60,83 @@ Chaque décorator va appliquer une dépense en proposant l'implémentation de la
 
 Une subtilité est à constater içi, la classe prend également en paramètre l'interface "ProfitCalculator". 
 En effet, chaque decorator va appliquer le calcul du decorator qui le précède et va ensuite y ajouter son calcul à lui. C'est ce comportement qui permet d'ajouter des traitements au runtime.
+
+Nous allons commencer par une classe proposant un calcul par défaut, appelé "DefaultProfitCalculator". Il est en effet utile de commencer par une classe de type "profitCalculator" qui ne dépend de rien lors de son instantiation. Ceci correspond au calcul initial des decorators : 
+
+[source,java]
+----
+public class DefaultProfitCalculator implements ProfitCalculator {
+
+  @Override
+  public double calculate(double turnover) {
+    return Expenses.getTransportExpenses(turnover);
+  }
+}
+----
+
+Nous allons ensuite montrer le code des différents decorators : 
+
+Charges d'exploitation => OperatingExpensesDecorator : 
+[source,java]
+----
+public class OperatingExpensesDecorator extends AbstractProfitDecorator {
+
+  public OperatingExpensesDecorator(ProfitCalculator profitCalculator) {
+    super(profitCalculator);
+  }
+
+  @Override
+  protected double applyExpense(double turnover) {
+    return Expenses.getOperatingExpenses(turnover);
+  }
+}
+----
+
+Rémunération => RemunerationDecorator : 
+[source,java]
+----
+public class RemunerationDecorator extends AbstractProfitDecorator {
+
+  public RemunerationDecorator(ProfitCalculator profitCalculator) {
+    super(profitCalculator);
+  }
+
+  @Override
+  protected double applyExpense(double turnover) {
+    return Expenses.getRemuneration(turnover);
+  }
+}
+----
+
+Dépenses exceptionnelles => ExceptionalExpensesDecorator : 
+[source,java]
+----
+public class ExceptionalExpensesDecorator extends AbstractProfitDecorator {
+
+  public ExceptionalExpensesDecorator(ProfitCalculator profitCalculator) {
+    super(profitCalculator);
+  }
+
+  @Override
+  protected double applyExpense(double turnover) {
+    return Expenses.getExceptionalExpenses(turnover);
+  }
+}
+----
+
+Taxes déductible => DeductibleTaxesDecorator : 
+[source,java]
+----
+public class DeductibleTaxesDecorator extends AbstractProfitDecorator {
+
+  public DeductibleTaxesDecorator(ProfitCalculator profitCalculator) {
+    super(profitCalculator);
+  }
+
+  @Override
+  protected double applyExpense(double turnover) {
+    return Expenses.getDeductibleTaxes(turnover);
+  }
+}
+----
+
