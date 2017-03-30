@@ -265,4 +265,6 @@ Et c'est tout... Nous allons pouvoir pouvoir désormais écrire notre decorator 
   }
 ----
 
+N'est-ce pas magnifique ? nous avons pu réecrire le pattern décorator avec très peu de ligne de code. 
+Le JDK 8 donne la possibilité de composer plusieurs fonctions entre elles via la "default" méthode "andThen". Cette méthode est proposées dans les fonctions par défaut poposée par le JDK et le DoubleUnaryOperator en fait partie.
 
