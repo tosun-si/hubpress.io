@@ -185,3 +185,7 @@ Voici un second test qui n'applique pas tous les décorator, et montre qu'il est
   }
 ----
 
+Au niveau du client de l'API, nous avons la confirmation que le pattern est interéssant à utiliser de part sa souplesse et du fait qu'il est possible d'ajouter un nouveau calcul (ou dans un autre cas une nouvelle règle) juste en créant un nouveau décorator et sans casser tous la conception mise en place.
+
+Cependant nous constatons que la mise en place de ce patron de conception, est très verbeuse. Beaucoup de classes et de lignes de codes doivent être écrites pour mettre en place ce type de design de code. 
+De plus, le fait qu'il soit orienté héritage peut rendre sa compréhénsion compliquée.
