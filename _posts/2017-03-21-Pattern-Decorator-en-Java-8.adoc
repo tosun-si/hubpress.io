@@ -143,3 +143,28 @@ public class DeductibleTaxesDecorator extends AbstractProfitDecorator {
 Le principe de chaque dcorator est le même, chacun doit proposer une implémentation de la méthide "applyExpense". Il est noter que les cas choisis ne reflètent pas forcemment la réalité, mais servent juste d'exemple.
 Une "garbage class" appelée Expenses contient des méthodes statiques permettant de calculer chaque cas. Nous monterons cette classe un peu plus tard.
 
+Nous allons désormais passer aux tests d'intégration et à l'appel des décorators. 
+
+Le premier test permet de composer tous les décorators : 
+
+[source,java]
+----
+@Test
+  public void givenTurnover_whenComposingAllDecorators_thenCorrectResult() {
+
+    // Given.
+    final double turnover = 100000;
+
+    // When.
+    final double profit =
+        new ExceptionalExpensesDecorator(new RemunerationDecorator(new DeductibleTaxesDecorator(new OperatingExpensesDecorator(new DefaultProfitCalculator())))).calculate(turnover);
+
+    // Then.
+    assertThat(profit).isNotNull().isEqualTo(32600);
+  }
+----
+
+Le calcul commence de droite à gauche, on commence par le DefaultProfitCalculator, enuite cette classe est passée en paramètre du décorator OperatingExpensesDecorator et ainsi de suite.
+OperatingExpensesDecorator applique le calcul de DefaultProfitCalculator plus le sien.
+
+Voici un second test qui n'applique pas tous les décorator, et montre qu'il est très simple d'ajouter ou de supprimer un decorator au runtime. Le code peut ainsi être évolutif.
