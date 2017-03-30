@@ -33,4 +33,26 @@ public interface ProfitCalculator {
 
 Un calculateur de profit dispose d'une méthode abstraite "calculate", qui va appliquer un nouveau calcul au CA passé en paramètre.
 
-Ensuite il faut créer une classe abstraite
+Ensuite il faut créer une classe abstraite que l'on va appeler AbstractProfitDecorator : 
+
+[source,java]
+----
+public abstract class AbstractProfitDecorator implements ProfitCalculator {
+
+  private final ProfitCalculator profitCalculator;
+
+  public AbstractProfitDecorator(ProfitCalculator profitCalculator) {
+    this.profitCalculator = profitCalculator;
+  }
+
+  protected abstract double applyExpense(double turnover);
+
+  @Override
+  public double calculate(double turnover) {
+    double profit = profitCalculator.calculate(turnover);
+    return applyExpense(profit);
+  }
+}
+----
+
+Cette classe implémente l'interface précédente et la prend également en paramètre. Chaque décorator va appliquer une dépense en proposant l'implémentation de la méthode [source,java]---- protected abstract double applyExpense(double turnover);----
