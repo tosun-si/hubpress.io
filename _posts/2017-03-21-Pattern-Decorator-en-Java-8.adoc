@@ -55,4 +55,8 @@ public abstract class AbstractProfitDecorator implements ProfitCalculator {
 }
 ----
 
-Cette classe implémente l'interface précédente et la prend également en paramètre. Chaque décorator va appliquer une dépense en proposant l'implémentation de la méthode [source,java]---- protected abstract double applyExpense(double turnover);----
+Cette classe implémente l'interface précédente et doit donc proposer l'implémentation de la méthode "calculate(double turnover)". 
+Chaque décorator va appliquer une dépense en proposant l'implémentation de la méthode "applyExpense(double turnover)".
+
+Une subtilité est à constater içi, la classe prend également en paramètre l'interface "ProfitCalculator". 
+En effet, chaque decorator va appliquer le calcul du decorator qui le précède et va ensuite y ajouter son calcul à lui.
