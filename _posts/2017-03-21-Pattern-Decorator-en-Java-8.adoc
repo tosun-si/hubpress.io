@@ -140,3 +140,6 @@ public class DeductibleTaxesDecorator extends AbstractProfitDecorator {
 }
 ----
 
+Le principe de chaque dcorator est le même, chacun doit proposer une implémentation de la méthide "applyExpense". Il est noter que les cas choisis ne reflètent pas forcemment la réalité, mais servent juste d'exemple.
+Une "garbage class" appelée Expenses contient des méthodes statiques permettant de calculer chaque cas. Nous monterons cette classe un peu plus tard.
+
