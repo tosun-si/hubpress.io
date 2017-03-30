@@ -188,4 +188,81 @@ Voici un second test qui n'applique pas tous les décorator, et montre qu'il est
 Au niveau du client de l'API, nous avons la confirmation que le pattern est interéssant à utiliser de part sa souplesse et du fait qu'il est possible d'ajouter un nouveau calcul (ou dans un autre cas une nouvelle règle) juste en créant un nouveau décorator et sans casser tous la conception mise en place.
 
 Cependant nous constatons que la mise en place de ce patron de conception, est très verbeuse. Beaucoup de classes et de lignes de codes doivent être écrites pour mettre en place ce type de design de code. 
-De plus, le fait qu'il soit orienté héritage peut rendre sa compréhénsion compliquée.
+De plus, le fait qu'il soit orienté héritage peut rendre sa compréhénsion compliquée. Tous ces éléments peuvent dissuader le développeur à mettre en place ce type de conception.
+
+Un des exemples de l'utilisation de ce pattern dans le JDK est la classe .....
+
+Nous allons voir dans la deuxième partie comment refaire le pattern decorator en Java 8 avec des lambdas et des fonctions; et de montrer que l'écriture est beaucoup plus simple et beaucoup moins verbeuse.
+
+== 2) Decorator en Java 8
+
+Nous allons commencer par montrer les méthodes statiques proposées par la garbage classe Expenses : 
+
+[source,java]
+----
+public class Expenses {
+
+  public static double getTransportExpenses(final double turnover) {
+    return turnover - 2400;
+  }
+
+  public static double getOperatingExpenses(final double turnover) {
+    return turnover - 15000;
+  }
+
+  public static double getDeductibleTaxes(final double turnover) {
+    return turnover - 3000;
+  }
+
+  public static double getRemuneration(final double turnover) {
+    return turnover - 45000;
+  }
+
+  public static double getExceptionalExpenses(final double turnover) {
+    return turnover - 2000;
+  }
+}
+----
+
+Chaque méthode statique effectue le calcul souhaité en prenant un double en paramètre et en retournant en sortie.
+
+Nous allons ensuite montrer différente façons d'implémenter ce pattern en Java 8.
+
+== a) Decorator en Java 8 avec de la composition de fonctions
+
+Comme pour la partie Java 7, nous allons écrire une classe contenant le calcul par défaut : 
+
+[source,java]
+----
+public class DefaultProfitCalculator implements DoubleUnaryOperator {
+
+  @Override
+  public double applyAsDouble(final double operand) {
+    return Expenses.getTransportExpenses(operand);
+  }
+}
+----
+
+Cette classe implémente une interface fonctionnelle proposée par défaut dans le JDK 8 DoubleUnaryOperator. Cette fonction prend un double en entrée et retourne un double en sortie, ce qui correspond à la signature des calculs présents dans la classe Expenses. L'implémentation de la méthode applyAsDouble est effectué avec un calcul par défaut.
+
+Et c'est tout... Nous allons pouvoir pouvoir désormais écrire notre decorator en Java 8, via un test : 
+
+[source,java]
+----
+@Test
+  public void givenTurnover_whenComposingAllDecoratorsWithAndThen_thenCorrectResult() {
+
+    // Given.
+    final double turnover = 100000;
+
+    // When.
+    final double profit = new DefaultProfitCalculator().andThen(Expenses::getOperatingExpenses)
+        .andThen(Expenses::getDeductibleTaxes).andThen(Expenses::getRemuneration)
+        .andThen(Expenses::getExceptionalExpenses).applyAsDouble(turnover);
+
+    // Then.
+    assertThat(profit).isNotNull().isEqualTo(32600);
+  }
+----
+
+
