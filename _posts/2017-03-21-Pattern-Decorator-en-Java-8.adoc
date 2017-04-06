@@ -310,7 +310,7 @@ public enum StreamDecorator {
 }
 ----
 
-Le principe içi est de passer une suite de fonction representée par des DoubleUnaryOperator (équivalent à un tableau de fonction).
+Le principe içi est de passer une suite de fonction representée par des DoubleUnaryOperator (équivalent à un tableau de fonction). La méthode prend également en paramètre le CA.
 L'API stream propose une factory method permettant d'initialiser une Stream à partir d'un tableau. Nous utilisons ensuite la méthode "reduce" qui permet de réduire les éléments du flux à une seule valeur.
 
 En programation fonctionnelle le reduce correspond à du "fold". Le principe est de passer 2 fonctions, une initiale (et valeur par défaut) et l'autre permettant d'accumuler des éléments. Il devient, par exemple, très simple avec ce type d'opérateur de calculer la somme des élements d'une liste.
@@ -326,4 +326,23 @@ La fonction intiale est la valeur 0. La somme des éléments de la liste vont co
 
 Notre exemple suit le même principe, la fonction initiale est "DoubleUnaryOperator.identity()" et l'accumulateur est "DoubleUnaryOperator::andThen" ou "(ope1, ope2) -> ope1.andThen(ope2)". Comme vu précédemment à chaque itération "andThen" va permettre de composer la fonction précédente avec la fonction en cours. Si la structure est vide "DoubleUnaryOperator.identity()" sera retourné (dans ce cas un fonction vide).
 
+Voici le code du test utilisant un exemple avec tous les decorator : 
+
+[source,java]
+----
+@Test
+  public void givenTurnover_whenComposingAllDecoratorsWithStream_thenCorrectResult() {
+
+    // Given.
+    final double turnover = 100000;
+
+    // When.
+    final double profit = StreamDecorator.INSTANCE.calculateProfit(turnover,
+        new DefaultProfitCalculator(), Expenses::getOperatingExpenses, Expenses::getDeductibleTaxes,
+        Expenses::getRemuneration, Expenses::getExceptionalExpenses);
+
+    // Then.
+    assertThat(profit).isNotNull().isEqualTo(32600);
+  }
+----
 
