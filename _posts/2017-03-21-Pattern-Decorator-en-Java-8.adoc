@@ -465,6 +465,55 @@ public T calculate() {
 }
 ----
 
+Voici le code du test avec tous les decorators : 
+
+[source,java]
+----
+  @Test
+  public void givenTurnover_whenComposingAllDecoratorsWithFluentStyle_thenCorrectResult() {
+
+    // Given.
+    final double turnover = 100000;
+
+    // When.
+    final double profit = FluentDecorator
+                            .from(turnover)
+                            .with(Expenses::getTransportExpenses)
+                            .with(Expenses::getOperatingExpenses)
+                            .with(Expenses::getDeductibleTaxes)
+                            .with(Expenses::getRemuneration)
+                            .with(Expenses::getExceptionalExpenses)
+                            .calculate();
+
+    // Then.
+    assertThat(profit).isNotNull().isEqualTo(32600);
+  }
+----
+
+Et le code sans le decorator "ExceptionalExpenses" : 
+
+[source,java]
+----
+@Test
+  public void givenTurnover_whenNotComposingAllDecoratorsWithFluentStyle_thenCorrectResult() {
+
+    // Given.
+    final double turnover = 100000;
+
+    // When.
+    final double profit = FluentDecorator
+                            .from(turnover)
+                            .with(Expenses::getTransportExpenses)
+                            .with(Expenses::getOperatingExpenses)
+                            .with(Expenses::getDeductibleTaxes)
+                            .with(Expenses::getRemuneration).calculate();
+
+    // Then.
+    assertThat(profit).isNotNull().isEqualTo(34600);
+  }
+----
+
+
 
 
 
