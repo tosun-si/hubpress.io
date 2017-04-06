@@ -346,3 +346,8 @@ Voici le code du test utilisant un exemple avec tous les decorator :
   }
 ----
 
+La méthode "calculateProfit" est appelée avec la CA et la liste des fonctions decorator séparée une virgule. Ceci a été via la paramètre de méthode suivant : "DoubleUnaryOperator... operators".
+De nouveau le client de l'API dispose d'un traitement très souple, facilement modifiable et évolutif.
+
+
+
