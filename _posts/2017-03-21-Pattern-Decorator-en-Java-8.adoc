@@ -293,7 +293,7 @@ Dans les parties suivantes, nous allons voir d'autres façons d'implémenter le 
 == b) Decorator en Java 8 avec l'API Stream
 
 Dans cette partie, nous allons voir qu'il est possible implémenter le pattern decorator avec l'API Stream.
-Nous allons créé une classe appelé StreamDecorator correspondant à une enum singleton (instance unique). Cette classe contient une méthode appelé calculateProfit : 
+Nous allons créé une classe appelé StreamDecorator correspondant à une enum singleton (instance unique). Cette classe contient une méthode appelé calculateProfit qui sera exposée au client de l'API : 
 
 [source,java]
 ----
@@ -308,4 +308,8 @@ public enum StreamDecorator {
   }
 }
 ----
+
+Le principe içi est de passer une suite de fonction representée par des DoubleUnaryOperator (équivalent à un tableau de fonction).
+L'API stream propose une factory method permettant d'initialiser une Stream à partir d'un tableau. Nous utilisons ensuite la méthode "reduce" qui permet de réduire les éléments du flux à une seule valeur.
+
 
