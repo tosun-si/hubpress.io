@@ -264,7 +264,7 @@ Et c'est tout... Nous allons pouvoir pouvoir désormais écrire notre decorator 
     assertThat(profit).isNotNull().isEqualTo(32600);
   }
 ----
-
+s 
 N'est-ce pas grandiose ? nous avons pu réecrire le pattern décorator avec très peu de ligne de code. 
 Le JDK 8 donne la possibilité de composer plusieurs fonctions entre elles via la "default" méthode "andThen". Cette méthode est proposées dans les fonctions par défaut poposée par le JDK et le DoubleUnaryOperator en fait partie.
 
@@ -291,3 +291,21 @@ AInsi il devient très simple d'ajouter ou de supprimer des decorators, dans l'e
 Dans les parties suivantes, nous allons voir d'autres façons d'implémenter le pattern decorator en Java 8.
 
 == b) Decorator en Java 8 avec l'API Stream
+
+Dans cette partie, nous allons voir qu'il est possible implémenter le pattern decorator avec l'API Stream.
+Nous allons créé une classe appelé StreamDecorator correspondant à une enum singleton (instance unique). Cette classe contient une méthode appelé calculateProfit : 
+
+[source,java]
+----
+public enum StreamDecorator {
+
+  // Single instance.
+  INSTANCE;
+
+  public double calculateProfit(final double turnover, final DoubleUnaryOperator... operators) {
+    return Stream.of(operators).reduce(DoubleUnaryOperator.identity(), DoubleUnaryOperator::andThen)
+        .applyAsDouble(turnover);
+  }
+}
+----
+
