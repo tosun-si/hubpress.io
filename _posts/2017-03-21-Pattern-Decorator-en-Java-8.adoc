@@ -288,3 +288,6 @@ AInsi il devient très simple d'ajouter ou de supprimer des decorators, dans l'e
   }
 ----
 
+Dans les parties suivantes, nous allons voir d'autres façons d'implémenter le pattern decorator en Java 8.
+
+== b) Decorator en Java 8 avec l'API Stream
