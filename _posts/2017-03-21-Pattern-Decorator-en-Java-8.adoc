@@ -426,7 +426,8 @@ private FluentDecorator(final T value, Function<T, T> function) {
 }
 ----
 
-Une static factory method est exposé au client de l'API pour initialiser la classe avec un nom parlant. Cette méthode s'appelle "from" et se base sur la valeur qui servira de base de calcul, dans notre cas le CA : 
+Une static factory method est exposé au client de l'API pour initialiser la classe avec un nom parlant. Cette méthode s'appelle "from" et se base sur la valeur qui servira de base de calcul, dans notre cas le CA; 
+Un contrôle est effectué sur la valeur afin de renvoyer une runtime exception si la valeur est nulle. Le constructeur de la classe est appelé avec cette valeur et une fonction initiale vide (ainsi le paramètre global "function" de la classe ne sera pas nul et on évitera des nullPointerException).
 
 [source,java]
 ----
@@ -435,7 +436,5 @@ public static <T> FluentDecorator<T> from(final T value) {
     return new FluentDecorator<>(value, Function.identity());
 }
 ----
-
-Un contrôle est effectué sur la valeur afin de renvoyer une runtime exception si la valeur est nulle. Le constructeur de la classe est appelé avec cette valeur et une fonction initiale vide (ainsi le paramètre global "function" de la classe ne sera pas nul et on évitera des nullPointerException).
 
 
