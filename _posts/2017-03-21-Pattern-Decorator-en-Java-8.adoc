@@ -444,6 +444,17 @@ La composition des decorator se fait via la méthode "with" qui prend en paramè
 new FluentDecorator<T>(this.value, function.andThen(otherFunction))
 ----
 
-La "value" global à la classe est repassée en paramètre et fonction globale est composé avec "otherFunction" (via andThen).
+La "value" global à la classe est repassée en paramètre et la fonction globale est composé avec "otherFunction" (via andThen). Le résultat de cette composition est repassé en paramètre de la classe FluentDecorator.
+Voici le code la méthode : 
+
+[source,java]
+----
+public FluentDecorator<T> with(final Function<T, T> otherFunction) {
+    return new FluentDecorator<T>(this.value, function.andThen(otherFunction));
+}
+----
+
+Lors de l'appel de 
+
 
 
