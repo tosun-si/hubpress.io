@@ -437,6 +437,13 @@ public static <T> FluentDecorator<T> from(final T value) {
 }
 ----
 
-La composition des decorator se fait via la méthode "with" qui prend en paramètre 
+La composition des decorator se fait via la méthode "with" qui prend en paramètre la fonction à ajouter à la composition générale. Le but est de rappeler de nouveau le constructeur de la classe mais cette fois ci de la façon suivante :        
+
+[source,java]
+----
+new FluentDecorator<T>(this.value, function.andThen(otherFunction))
+----
+
+La "value" global à la classe est repassée en paramètre et fonction globale est composé avec "otherFunction" (via andThen).
 
 
