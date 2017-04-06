@@ -268,7 +268,8 @@ Et c'est tout... Nous allons pouvoir pouvoir désormais écrire notre decorator 
                              .andThen(Expenses::getOperatingExpenses)
                              .andThen(Expenses::getDeductibleTaxes) 
                              .andThen(Expenses::getRemuneration)
-                             .andThen(Expenses::getExceptionalExpenses).applyAsDouble(turnover);
+                             .andThen(Expenses::getExceptionalExpenses)
+                             .applyAsDouble(turnover);
 
     // Then.
     assertThat(profit).isNotNull().isEqualTo(32600);
