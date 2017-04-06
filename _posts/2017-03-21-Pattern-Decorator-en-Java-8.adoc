@@ -437,4 +437,6 @@ public static <T> FluentDecorator<T> from(final T value) {
 }
 ----
 
+La composition des decorator se fait via la méthode "with" qui prend en paramètre 
+
 
