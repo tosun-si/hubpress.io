@@ -256,9 +256,11 @@ Et c'est tout... Nous allons pouvoir pouvoir désormais écrire notre decorator 
     final double turnover = 100000;
 
     // When.
-    final double profit = new DefaultProfitCalculator().andThen(Expenses::getOperatingExpenses)
-        .andThen(Expenses::getDeductibleTaxes).andThen(Expenses::getRemuneration)
-        .andThen(Expenses::getExceptionalExpenses).applyAsDouble(turnover);
+    final double profit = new DefaultProfitCalculator()
+                             .andThen(Expenses::getOperatingExpenses)
+                             .andThen(Expenses::getDeductibleTaxes) 
+                             .andThen(Expenses::getRemuneration)
+                             .andThen(Expenses::getExceptionalExpenses).applyAsDouble(turnover);
 
     // Then.
     assertThat(profit).isNotNull().isEqualTo(32600);
@@ -280,9 +282,11 @@ Ainsi il devient très simple d'ajouter ou de supprimer des decorators, dans l'e
     final double turnover = 100000;
 
     // When.
-    final double profit = new DefaultProfitCalculator().andThen(Expenses::getOperatingExpenses)
-        .andThen(Expenses::getDeductibleTaxes).andThen(Expenses::getRemuneration)
-        .applyAsDouble(turnover);
+    final double profit = new DefaultProfitCalculator()
+                             .andThen(Expenses::getOperatingExpenses)
+                             .andThen(Expenses::getDeductibleTaxes)
+                             .andThen(Expenses::getRemuneration)
+                             .applyAsDouble(turnover);
 
     // Then.
     assertThat(profit).isNotNull().isEqualTo(34600);
@@ -305,7 +309,7 @@ public enum StreamDecorator {
 
   public double calculateProfit(final double turnover, final DoubleUnaryOperator... operators) {
     return Stream.of(operators).reduce(DoubleUnaryOperator.identity(), DoubleUnaryOperator::andThen)
-        .applyAsDouble(turnover);
+                               .applyAsDouble(turnover);
   }
 }
 ----
@@ -349,5 +353,28 @@ Voici le code du test utilisant un exemple avec tous les decorator :
 La méthode "calculateProfit" est appelée avec la CA et la liste des fonctions decorator séparée une virgule. Ceci a été via la paramètre de méthode suivant : "DoubleUnaryOperator... operators".
 De nouveau le client de l'API dispose d'un traitement très souple, facilement modifiable et évolutif.
 
+Un exemple sans le decorator "ExceptionalExpenses" : 
+
+[source,java]
+----
+@Test
+  public void givenTurnover_whenNotComposingAllDecoratorsWithStream_thenCorrectResult() {
+
+    // Given.
+    final double turnover = 100000;
+
+    // When.
+    final double profit = StreamDecorator.INSTANCE.calculateProfit(turnover,
+        new DefaultProfitCalculator(), Expenses::getOperatingExpenses, Expenses::getDeductibleTaxes,
+        Expenses::getRemuneration);
+
+    // Then.
+    assertThat(profit).isNotNull().isEqualTo(34600);
+  }
+
+----
 
 
+== b) Decorator en Java 8 avec une API fluent
+
+Dans cette dernière partie, nous allons voir qu'il est possible d'implémenter le decorator via une API fluent et permettant d'indiquer clairement au client de l'API les traitement effectués.
