@@ -430,10 +430,12 @@ Une static factory method est exposé au client de l'API pour initialiser la cla
 
 [source,java]
 ----
-private FluentDecorator(final T value, Function<T, T> function) {
-    this.value = value;
-    this.function = function;
+public static <T> FluentDecorator<T> from(final T value) {
+    Objects.requireNonNull(value);
+    return new FluentDecorator<>(value, Function.identity());
 }
 ----
+
+Un contrôle est effectué sur la valeur afin de renvoyer une runtime exception si la valeur est nulle. Le constructeur de la classe est appelé avec cette valeur et une fonction initiale vide (ainsi le paramètre global "function" de la classe ne sera pas nul et on évitera des nullPointerException).
 
 
