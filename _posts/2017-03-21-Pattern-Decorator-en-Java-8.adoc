@@ -156,8 +156,12 @@ Le premier test permet de composer tous les décorators :
     final double turnover = 100000;
 
     // When.
-    final double profit =
-        new ExceptionalExpensesDecorator(new RemunerationDecorator(new DeductibleTaxesDecorator(new OperatingExpensesDecorator(new DefaultProfitCalculator())))).calculate(turnover);
+    final double profit = new ExceptionalExpensesDecorator
+                            (new RemunerationDecorator
+                               (new DeductibleTaxesDecorator
+                                  (new OperatingExpensesDecorator
+                                     (new DefaultProfitCalculator()))))
+                                     .calculate(turnover);
 
     // Then.
     assertThat(profit).isNotNull().isEqualTo(32600);
@@ -178,7 +182,11 @@ Voici un second test qui n'applique pas tous les décorator, et montre qu'il est
     final double turnover = 100000;
 
     // When.
-    final double profit = new RemunerationDecorator(new DeductibleTaxesDecorator(new OperatingExpensesDecorator(new DefaultProfitCalculator()))).calculate(turnover);
+    final double profit = new RemunerationDecorator
+                            (new DeductibleTaxesDecorator
+                               (new OperatingExpensesDecorator
+                                  (new DefaultProfitCalculator())))
+                                  .calculate(turnover);
 
     // Then.
     assertThat(profit).isNotNull().isEqualTo(34600);
@@ -342,8 +350,8 @@ Voici le code du test utilisant un exemple avec tous les decorator :
 
     // When.
     final double profit = StreamDecorator.INSTANCE.calculateProfit(turnover,
-        new DefaultProfitCalculator(), Expenses::getOperatingExpenses, Expenses::getDeductibleTaxes,
-        Expenses::getRemuneration, Expenses::getExceptionalExpenses);
+                             new DefaultProfitCalculator(), Expenses::getOperatingExpenses, Expenses::getDeductibleTaxes,
+                             Expenses::getRemuneration, Expenses::getExceptionalExpenses);
 
     // Then.
     assertThat(profit).isNotNull().isEqualTo(32600);
@@ -365,8 +373,8 @@ Un exemple sans le decorator "ExceptionalExpenses" :
 
     // When.
     final double profit = StreamDecorator.INSTANCE.calculateProfit(turnover,
-        new DefaultProfitCalculator(), Expenses::getOperatingExpenses, Expenses::getDeductibleTaxes,
-        Expenses::getRemuneration);
+                             new DefaultProfitCalculator(), Expenses::getOperatingExpenses, Expenses::getDeductibleTaxes,
+                             Expenses::getRemuneration);
 
     // Then.
     assertThat(profit).isNotNull().isEqualTo(34600);
@@ -506,7 +514,8 @@ Et le code sans le decorator "ExceptionalExpenses" :
                             .with(Expenses::getTransportExpenses)
                             .with(Expenses::getOperatingExpenses)
                             .with(Expenses::getDeductibleTaxes)
-                            .with(Expenses::getRemuneration).calculate();
+                            .with(Expenses::getRemuneration)
+                            .calculate();
 
     // Then.
     assertThat(profit).isNotNull().isEqualTo(34600);
