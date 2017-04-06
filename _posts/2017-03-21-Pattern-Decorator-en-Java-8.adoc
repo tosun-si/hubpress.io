@@ -324,6 +324,6 @@ reduce(0, (a, b) -> a + b)
 On considère dans cet exemple que a et b sont des entiers.
 La fonction intiale est la valeur 0. La somme des éléments de la liste vont commencer par défaut et l'accumulateur "(a, b) -> a + b" va permettre de sommer chaque élements de la liste au fur et à mesure (somme le résultat de l'itération précédente avec le résultat de l'itération en cours). Si la structure est vide la valeur initiale est retournée, c'est à dire 0. La fonction initiale est également la valeur par défaut si la structure est vide.
 
-Notre exemple suit le même principe, la fonction initiale est "DoubleUnaryOperator.identity()" et l'accumulateur est ""
+Notre exemple suit le même principe, la fonction initiale est "DoubleUnaryOperator.identity()" et l'accumulateur est "DoubleUnaryOperator::andThen" ou "(ope1, ope2) -> ope1.andThen(ope2)". Comme vu précédemment à chaque itération "andThen" va permettre de composer la fonction précédente avec la fonction en cours. Si la structure est vide "DoubleUnaryOperator.identity()" sera retourné (dans ce cas un fonction vide).
 
 
