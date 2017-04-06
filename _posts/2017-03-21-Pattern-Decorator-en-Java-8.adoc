@@ -265,6 +265,26 @@ Et c'est tout... Nous allons pouvoir pouvoir désormais écrire notre decorator 
   }
 ----
 
-N'est-ce pas magnifique ? nous avons pu réecrire le pattern décorator avec très peu de ligne de code. 
+N'est-ce pas grandiose ? nous avons pu réecrire le pattern décorator avec très peu de ligne de code. 
 Le JDK 8 donne la possibilité de composer plusieurs fonctions entre elles via la "default" méthode "andThen". Cette méthode est proposées dans les fonctions par défaut poposée par le JDK et le DoubleUnaryOperator en fait partie.
+
+AInsi il devient très simple d'ajouter ou de supprimer des decorators, dans l'exemple ci dessous nous supprimons le decorator qui représente les dépenses exceptionnelles : 
+
+[source,java]
+----
+@Test
+  public void givenTurnover_whenNotComposingAllDecoratorsWithAndThen_thenCorrectResult() {
+
+    // Given.
+    final double turnover = 100000;
+
+    // When.
+    final double profit = new DefaultProfitCalculator().andThen(Expenses::getOperatingExpenses)
+        .andThen(Expenses::getDeductibleTaxes).andThen(Expenses::getRemuneration)
+        .applyAsDouble(turnover);
+
+    // Then.
+    assertThat(profit).isNotNull().isEqualTo(34600);
+  }
+----
 
