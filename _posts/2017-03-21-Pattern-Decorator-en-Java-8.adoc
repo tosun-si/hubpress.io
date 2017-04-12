@@ -468,9 +468,10 @@ public FluentDecorator<T> with(final Function<T, T> otherFunction) {
 }
 ----
 
-Lors de l'appel à la méthode "with", le traitement est lazy, non évalué et non executé (lazy evaluation). Ceci est rendu possible par l'intermédiaire de la fonction.
+Lors de l'appel à la méthode "with", le traitement est lazy, non évalué et non executé (lazy evaluation). 
+Ceci constitue un des appports très interessant proposé par la programmation fonctionnelle. En effet l'implémentation de la fonction diffère du moment ou il est évalué, ce qui rend le code puissant car on peut décider de l'executer plus tard dans le programme. 
 
-Une méthode finale permet d'executer la fonction globale à la classe avec la valeur globale, "function.apply(value)". AInsi le résultat de la fonction est récupéré, dans notre cas le calcul du bénéfice : 
+Dans notre cas, une méthode finale permet d'executer la fonction globale à la classe avec la valeur globale, "function.apply(value)". Ainsi le résultat de la fonction est récupéré, c'est à dire le calcul du bénéfice : 
 
 [source,java]
 ----
