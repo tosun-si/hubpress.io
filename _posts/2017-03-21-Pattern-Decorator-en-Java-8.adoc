@@ -204,7 +204,7 @@ Nous allons voir dans la deuxième partie comment refaire le pattern decorator e
 
 == 2) Decorator en Java 8
 
-Nous allons commencer par montrer les méthodes statiques proposées par la garbage classe Expenses : 
+Nous allons commencer par montrer les méthodes "static" proposées par la garbage class "Expenses" : 
 
 [source,java]
 ----
@@ -232,7 +232,7 @@ public class Expenses {
 }
 ----
 
-Chaque méthode statique effectue le calcul souhaité en prenant un double en paramètre et en retournant en sortie.
+Chaque méthode "static" effectue le calcul souhaité en prenant un double en paramètre et en retournant également un double.
 
 Nous allons ensuite montrer différente façons d'implémenter ce pattern en Java 8.
 
@@ -251,13 +251,13 @@ public class DefaultProfitCalculator implements DoubleUnaryOperator {
 }
 ----
 
-Cette classe implémente une interface fonctionnelle proposée par défaut dans le JDK 8 DoubleUnaryOperator. Cette fonction prend un double en entrée et retourne un double en sortie, ce qui correspond à la signature des calculs présents dans la classe Expenses. L'implémentation de la méthode applyAsDouble est effectué avec un calcul par défaut.
+Cette classe implémente une interface fonctionnelle (= à une fonction) proposée par défaut dans le JDK 8 "DoubleUnaryOperator". Cette fonction prend un double en entrée et retourne un double en sortie, ce qui correspond à la signature des calculs présents dans la classe Expenses. L'implémentation de la méthode applyAsDouble est effectuée avec un calcul par défaut.
 
-Et c'est tout... Nous allons pouvoir pouvoir désormais écrire notre decorator en Java 8, via un test : 
+Et c'est tout... Nous allons pouvoir désormais écrire notre decorator en Java 8, via un test : 
 
 [source,java]
 ----
-@Test
+  @Test
   public void givenTurnover_whenComposingAllDecoratorsWithAndThen_thenCorrectResult() {
 
     // Given.
@@ -275,16 +275,16 @@ Et c'est tout... Nous allons pouvoir pouvoir désormais écrire notre decorator 
     assertThat(profit).isNotNull().isEqualTo(32600);
   }
 ----
-s 
-N'est-ce pas grandiose ? nous avons pu réecrire le pattern décorator avec très peu de ligne de code. 
-Le JDK 8 donne la possibilité de composer plusieurs fonctions entre elles via la "default" méthode "andThen". Cette méthode est proposées dans les fonctions par défaut poposée par le JDK et le DoubleUnaryOperator en fait partie.
-On démarre à partir de la classe DefaultProfitCalculator, et via andThen on la compose avec une autre fonction. Dans cet exemple des appels par référence de méthode ont été provilégié afin d'avoir un code plus concis et plus expressif "Expenses::getOperatingExpenses", mais des lambdas expression auraient également fait l'affaire "e -> Expenses.getOperatingExpenses(e)".
 
-Ainsi il devient très simple d'ajouter ou de supprimer des decorators, dans l'exemple ci dessous nous supprimons le decorator qui représente les dépenses exceptionnelles : 
+N'est-ce pas grandiose ? nous avons pu réecrire le pattern décorator avec très peu de ligne de code. 
+Le JDK 8 donne la possibilité de composer plusieurs fonctions entre elles via la "default" méthode "andThen". Cette méthode est proposée dans les fonctions par défaut du JDK et le DoubleUnaryOperator en fait partie.
+On démarre à partir de la classe DefaultProfitCalculator, et via "andThen" on compose ce traitement avec une autre fonction. Dans cet exemple, des appels par référence de méthode ont été privilégiés afin d'avoir un code plus concis et plus expressif "Expenses::getOperatingExpenses", mais des lambdas expression auraient également fait l'affaire "e -> Expenses.getOperatingExpenses(e)".
+
+Ainsi, il devient très simple d'ajouter ou de supprimer des decorators. Dans l'exemple ci dessous nous supprimons le decorator qui représente les dépenses exceptionnelles : 
 
 [source,java]
 ----
-@Test
+  @Test
   public void givenTurnover_whenNotComposingAllDecoratorsWithAndThen_thenCorrectResult() {
 
     // Given.
@@ -307,7 +307,7 @@ Dans les parties suivantes, nous allons voir d'autres façons d'implémenter le 
 == b) Decorator en Java 8 avec l'API Stream
 
 Dans cette partie, nous allons voir qu'il est possible implémenter le pattern decorator avec l'API Stream.
-Nous allons créé une classe appelé StreamDecorator correspondant à une enum singleton (instance unique). Cette classe contient une méthode appelé calculateProfit qui sera exposée au client de l'API : 
+Nous allons créer une classe appelé "StreamDecorator" correspondant à une enum singleton (instance unique). Cette classe contient une méthode appelé calculateProfit qui sera exposée au client de l'API : 
 
 [source,java]
 ----
