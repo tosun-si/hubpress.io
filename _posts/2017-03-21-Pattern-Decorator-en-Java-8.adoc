@@ -11,7 +11,7 @@ En gros l'idée de ce pattern est d'ajouter du comportement à du code au runtim
 Ce pattern présente de nombreux avantages car lorsque la conception a été mise en place, il devient très simple d'ajouter du comportement au code existant, ce qui le rend très evolutif.
 
 Avant Java 8, malgré l'aspect interessant évoqué précédement, ce pattern n'était pas beaucoup utilisé car le code nécessaire à sa mise en place était très verbeux.
-En effet le design de code était basé sur l'héritage, ce qui obligeait le développeur à écrire une interface par décorator, assez qu'une classe abstraite. La verbosité induite par ce type de dévéloppement pouvait décourager pas mal de développeurs.
+En effet le design de code était basé sur l'héritage, ce qui obligeait le développeur à écrire une classe par décorator, ainsi qu'une interface + une classe abstraite. La verbosité induite par ce type de dévéloppement pouvait décourager pas mal de développeurs.
 
 En Java 8 avec l'apport des lambdas, nous allons montrer que le decorator est beaucoup plus simple à implémenter, moins verbeux, fonctionnel et plus lisible pour le client de l'API.
 
@@ -33,7 +33,7 @@ public interface ProfitCalculator {
 
 Un calculateur de profit dispose d'une méthode abstraite "calculate", qui va appliquer un nouveau calcul au CA passé en paramètre.
 
-Ensuite il faut créer une classe abstraite que l'on va appeler AbstractProfitDecorator : 
+Ensuite une classe abstraite doit être créée (classe mère de chaque decorator), nous allons l'appeler AbstractProfitDecorator : 
 
 [source,java]
 ----
@@ -61,7 +61,7 @@ Chaque décorator va appliquer une dépense en proposant l'implémentation de la
 Une subtilité est à constater içi, la classe prend également en paramètre l'interface "ProfitCalculator". 
 En effet, chaque decorator va appliquer le calcul du decorator qui le précède et va ensuite y ajouter son calcul à lui. C'est ce comportement qui permet d'ajouter des traitements au runtime.
 
-Nous allons commencer par une classe proposant un calcul par défaut, appelé "DefaultProfitCalculator". Il est en effet utile de commencer par une classe de type "profitCalculator" qui ne dépend de rien lors de son instantiation. Ceci correspond au calcul initial des decorators : 
+Nous allons commencer par une classe proposant un calcul par défaut, appelé "DefaultProfitCalculator". Il est, en effet, utile de commencer par une classe de type "profitCalculator" qui ne dépend de rien lors de son instantiation. Ceci correspond au calcul initial des decorators : 
 
 [source,java]
 ----
@@ -140,8 +140,8 @@ public class DeductibleTaxesDecorator extends AbstractProfitDecorator {
 }
 ----
 
-Le principe de chaque dcorator est le même, chacun doit proposer une implémentation de la méthide "applyExpense". Il est noter que les cas choisis ne reflètent pas forcemment la réalité, mais servent juste d'exemple.
-Une "garbage class" appelée Expenses contient des méthodes statiques permettant de calculer chaque cas. Nous monterons cette classe un peu plus tard.
+Le principe de chaque decorator est le même, chacun doit proposer une implémentation de la méthode "applyExpense". Il est à noter que les cas choisis dans cet article pour représenter le bénéfice d'une entreprise ne reflètent pas forcemment la réalité, mais servent juste d'exemple.
+Une "garbage class" appelée "Expenses" contient des méthodes "static" permettant de calculer chaque cas. Nous montrerons cette classe un peu plus tard.
 
 Nous allons désormais passer aux tests d'intégration et à l'appel des décorators. 
 
@@ -149,7 +149,7 @@ Le premier test permet de composer tous les décorators :
 
 [source,java]
 ----
-@Test
+  @Test
   public void givenTurnover_whenComposingAllDecorators_thenCorrectResult() {
 
     // Given.
@@ -168,14 +168,14 @@ Le premier test permet de composer tous les décorators :
   }
 ----
 
-Le calcul commence de droite à gauche, on commence par le DefaultProfitCalculator, enuite cette classe est passée en paramètre du décorator OperatingExpensesDecorator et ainsi de suite.
+Le calcul commence de droite à gauche, le point de départ est le DefaultProfitCalculator, ensuite cette classe est passée en paramètre du décorator OperatingExpensesDecorator et ainsi de suite.
 OperatingExpensesDecorator applique le calcul de DefaultProfitCalculator plus le sien.
 
 Voici un second test qui n'applique pas tous les décorator, et montre qu'il est très simple d'ajouter ou de supprimer un decorator au runtime. Le code peut ainsi être évolutif : 
 
 [source,java]
 ----
-@Test
+  @Test
   public void givenTurnover_whenNotComposingAllDecorators_thenCorrectResult() {
 
     // Given.
@@ -193,14 +193,14 @@ Voici un second test qui n'applique pas tous les décorator, et montre qu'il est
   }
 ----
 
-Au niveau du client de l'API, nous avons la confirmation que le pattern est interéssant à utiliser de part sa souplesse et du fait qu'il est possible d'ajouter un nouveau calcul (ou dans un autre cas une nouvelle règle) juste en créant un nouveau décorator et sans casser tous la conception mise en place.
+Au niveau du client de l'API, nous avons la confirmation que ce pattern est interéssant à utiliser de part sa souplesse et du fait qu'il est possible d'ajouter un nouveau calcul juste en créant un nouveau décorator. Ainsi en cas d'évolution, la conception mise en place n'aura pas besoin d'être modifiée.
 
-Cependant nous constatons que la mise en place de ce patron de conception, est très verbeuse. Beaucoup de classes et de lignes de codes doivent être écrites pour mettre en place ce type de design de code. 
-De plus, le fait qu'il soit orienté héritage peut rendre sa compréhénsion compliquée. Tous ces éléments peuvent dissuader le développeur à mettre en place ce type de conception.
+Cependant nous constatons que la mise en place de ce patron de conception, est très verbeuse. Beaucoup de classes et de lignes de codes doivent être écrites pour arriver à l'objectif attendu. 
+De plus, le fait qu'il soit orienté héritage peut rendre sa compréhénsion compliquée. Tous ces éléments peuvent dissuader le développeur à se lancer sur ce type de conception.
 
 Un des exemples de l'utilisation de ce pattern dans le JDK est la classe .....
 
-Nous allons voir dans la deuxième partie comment refaire le pattern decorator en Java 8 avec des lambdas et des fonctions; et de montrer que l'écriture est beaucoup plus simple et beaucoup moins verbeuse.
+Nous allons voir dans la deuxième partie comment refaire le pattern decorator en Java 8 avec des lambdas et des fonctions. Nous verrons également que l'écriture est plus simple et beaucoup moins verbeuse.
 
 == 2) Decorator en Java 8
 
