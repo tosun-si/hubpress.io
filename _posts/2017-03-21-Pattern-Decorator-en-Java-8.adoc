@@ -59,7 +59,7 @@ Cette classe implémente l'interface précédente et doit donc proposer l'implé
 Chaque décorator va appliquer une dépense en proposant l'implémentation de la méthode "applyExpense(double turnover)".
 
 Une subtilité est à constater içi, la classe prend également en paramètre l'interface "ProfitCalculator". 
-En effet, chaque decorator va appliquer le calcul du decorator qui le précède et va ensuite y ajouter son calcul à lui. C'est ce comportement qui permet d'ajouter des traitements au runtime.
+En effet, chaque decorator va appliquer le calcul du decorator qui le précède et va ensuite y ajouter son calcul. C'est ce comportement qui permet d'ajouter des traitements au runtime.
 
 Nous allons commencer par une classe proposant un calcul par défaut, appelé "DefaultProfitCalculator". Il est, en effet, utile de commencer par une classe de type "profitCalculator" qui ne dépend de rien lors de son instantiation. Ceci correspond au calcul initial des decorators : 
 
@@ -306,7 +306,7 @@ Dans les parties suivantes, nous allons voir d'autres façons d'implémenter le 
 
 == b) Decorator en Java 8 avec l'API Stream
 
-Dans cette partie, nous allons voir qu'il est possible implémenter le pattern decorator avec l'API Stream.
+Dans cette partie nous allons voir qu'il est possible implémenter le pattern decorator avec l'API Stream.
 Nous allons créer une classe appelé "StreamDecorator" correspondant à une enum singleton (instance unique). Cette classe contient une méthode appelé calculateProfit qui sera exposée au client de l'API : 
 
 [source,java]
@@ -390,7 +390,7 @@ Voici un exemple sans le decorator "ExceptionalExpenses" :
 
 == b) Decorator en Java 8 avec une API fluent
 
-Dans cette dernière partie, nous allons voir qu'il est possible d'implémenter le pattern decorator via une API "fluent" et permettant d'indiquer clairement au client de l'API les traitements effectués.
+Dans cette dernière partie nous allons voir qu'il est possible d'implémenter le pattern decorator via une API "fluent" et permettant d'indiquer clairement au client de l'API les traitements effectués.
 L'objectif va être de créer une classe Wrapper de type builder afin de composer nos fonctions de façon fluide.
 
 Voici le code complet de la classe appelée FluentDecorator : 
@@ -441,7 +441,7 @@ private FluentDecorator(final T value, Function<T, T> function) {
 ----
 
 Une "static factory method" est exposée au client de l'API pour initialiser la classe avec un nom parlant. Cette méthode s'appelle "from" et prend en paramètre la valeur qui servira de base de calcul, dans notre cas le CA. 
-Un contrôle est effectué sur la valeur afin de renvoyer une "runtime exception" si elle est nulle. Le constructeur de la classe est appelé avec cette valeur et une fonction initiale vide (ainsi le paramètre global "function" de la classe ne sera pas nul et permettra d'éviter des nullPointerException).
+Un contrôle est effectué sur la valeur afin de renvoyer une "runtime exception" si elle est nulle. Le constructeur de la classe est appelé avec cette valeur et une fonction initiale vide (ainsi le paramètre global "function" de la classe ne sera pas nul et ceci permettra d'éviter des nullPointerException).
 
 [source,java]
 ----
@@ -505,7 +505,7 @@ Voici le code du test avec tous les decorators :
   }
 ----
 
-Et le code sans le decorator "ExceptionalExpenses" : 
+Voici le test sans le decorator "ExceptionalExpenses" : 
 
 [source,java]
 ----
