@@ -324,9 +324,9 @@ public enum StreamDecorator {
 ----
 
 Le principe içi est de passer une suite de fonction representée par des DoubleUnaryOperator (équivalent à un tableau de fonction). La méthode prend également en paramètre le CA.
-L'API stream propose une factory method permettant d'initialiser une Stream à partir d'un tableau. Nous utilisons ensuite la méthode "reduce" qui permet de réduire les éléments du flux à une seule valeur.
+L'API stream propose une "factory method" "of" permettant d'initialiser une Stream à partir d'un tableau. Nous utilisons ensuite la méthode "reduce" qui permet de réduire les éléments du flux à une seule valeur.
 
-En programation fonctionnelle le reduce correspond à du "fold". Le principe est de passer 2 fonctions, une initiale (et valeur par défaut) et l'autre permettant d'accumuler des éléments. Il devient, par exemple, très simple avec ce type d'opérateur de calculer la somme des élements d'une liste.
+En programation fonctionnelle le reduce correspond à du "fold". Le principe est de passer 2 fonctions, une initiale (et valeur par défaut) et l'autre permettant d'accumuler des éléments. Il devient très simple avec ce type d'opérateur de calculer la somme des élements d'une liste.
 Par exemple : 
 
 [source,java]
