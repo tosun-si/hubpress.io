@@ -61,7 +61,7 @@ Chaque décorator va appliquer une dépense en proposant l'implémentation de la
 Une subtilité est à constater içi, la classe prend également en paramètre l'interface "ProfitCalculator". 
 En effet, chaque decorator va appliquer le calcul du decorator qui le précède et va ensuite y ajouter son calcul. C'est ce comportement qui permet d'ajouter des traitements au runtime.
 
-Nous allons commencer par une classe proposant un calcul par défaut, appelé "DefaultProfitCalculator". Il est, en effet, utile de commencer par une classe de type "profitCalculator" qui ne dépend de rien lors de son instantiation. Ceci correspond au calcul initial des decorators : 
+Nous allons commencer par une classe proposant un calcul par défaut, appelée "DefaultProfitCalculator". Il est, en effet, utile de commencer par une classe de type "profitCalculator" qui ne dépend de rien lors de son instantiation. Ceci correspond au calcul initial des decorators : 
 
 [source,java]
 ----
@@ -193,7 +193,7 @@ Voici un second test qui n'applique pas tous les décorator, et montre qu'il est
   }
 ----
 
-Au niveau du client de l'API, nous avons la confirmation que ce pattern est interéssant à utiliser de part sa souplesse et du fait qu'il est possible d'ajouter un nouveau calcul juste en créant un nouveau décorator. Ainsi en cas d'évolution, la conception mise en place n'aura pas besoin d'être modifiée.
+Au niveau du client de l'API nous avons la confirmation que ce pattern est interéssant à utiliser de part sa souplesse. Il suffit de créer un nouveau decorator pour un ajouter un nouveau calcul. Ainsi en cas d'évolution, la conception mise en place n'aura pas besoin d'être modifiée.
 
 Cependant nous constatons que la mise en place de ce patron de conception, est très verbeuse. Beaucoup de classes et de lignes de codes doivent être écrites pour arriver à l'objectif attendu. 
 De plus, le fait qu'il soit orienté héritage peut rendre sa compréhénsion compliquée. Tous ces éléments peuvent dissuader le développeur à se lancer sur ce type de conception.
@@ -232,13 +232,13 @@ public class Expenses {
 }
 ----
 
-Chaque méthode "static" effectue le calcul souhaité en prenant un double en paramètre et en retournant également un double.
+Chaque méthode "static" effectue le calcul souhaité avec un double en entrée et en sortie.
 
 Nous allons ensuite montrer différente façons d'implémenter ce pattern en Java 8.
 
 == a) Decorator en Java 8 avec de la composition de fonctions
 
-Comme pour la partie Java 7, nous allons écrire une classe contenant le calcul par défaut : 
+Comme pour la partie Java 7 nous allons écrire une classe contenant le calcul par défaut : 
 
 [source,java]
 ----
@@ -253,7 +253,7 @@ public class DefaultProfitCalculator implements DoubleUnaryOperator {
 
 Cette classe implémente une interface fonctionnelle (= à une fonction) proposée par défaut dans le JDK 8 "DoubleUnaryOperator". Cette fonction prend un double en entrée et retourne un double en sortie, ce qui correspond à la signature des calculs présents dans la classe Expenses. L'implémentation de la méthode applyAsDouble est effectuée avec un calcul par défaut.
 
-Et c'est tout... Nous allons pouvoir désormais écrire notre decorator en Java 8, via un test : 
+Et c'est tout... nous allons pouvoir désormais écrire notre decorator en Java 8 via un test : 
 
 [source,java]
 ----
