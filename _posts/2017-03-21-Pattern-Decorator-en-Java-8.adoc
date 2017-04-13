@@ -306,8 +306,8 @@ Dans les parties suivantes, nous allons voir d'autres façons d'implémenter le 
 
 == b) Decorator en Java 8 avec l'API Stream
 
-Dans cette partie nous allons voir qu'il est possible implémenter le pattern decorator avec l'API Stream.
-Nous allons créer une classe appelé "StreamDecorator" correspondant à une enum singleton (instance unique). Cette classe contient une méthode appelé calculateProfit qui sera exposée au client de l'API : 
+Dans cette partie nous allons voir qu'il est possible d'implémenter le pattern decorator avec l'API Stream.
+Nous allons créer une classe appelé "StreamDecorator" correspondant à une enum singleton (instance unique). Cette classe contient une méthode appelée "calculateProfit" qui sera exposée au client de l'API : 
 
 [source,java]
 ----
@@ -326,7 +326,7 @@ public enum StreamDecorator {
 Le principe içi est de passer une suite de fonction representée par des DoubleUnaryOperator (équivalent à un tableau de fonction). La méthode prend également en paramètre le CA.
 L'API stream propose une "factory method" "of" permettant d'initialiser une Stream à partir d'un tableau. Nous utilisons ensuite la méthode "reduce" qui permet de réduire les éléments du flux à une seule valeur.
 
-En programation fonctionnelle le reduce correspond à du "fold". Le principe est de passer 2 fonctions, une initiale (et valeur par défaut) et l'autre permettant d'accumuler des éléments. Il devient très simple avec ce type d'opérateur de calculer la somme des élements d'une liste.
+En programmation fonctionnelle le reduce correspond à du "fold". Le principe est de passer 2 fonctions, une initiale (et valeur par défaut) et l'autre permettant d'accumuler des éléments. Il devient très simple avec ce type d'opérateur de calculer la somme des élements d'une liste.
 Par exemple : 
 
 [source,java]
@@ -458,7 +458,7 @@ La composition des decorator se fait via la méthode "with" qui prend en paramè
 new FluentDecorator<T>(this.value, function.andThen(otherFunction))
 ----
 
-La fonction globale est composé avec "otherFunction" (via andThen). La "value" globale (this.value) et le résultat de cette composition est repassé en paramètre de la classe FluentDecorator.
+La fonction globale est composé avec "otherFunction" (via andThen). La "value" globale (this.value) et le résultat de cette composition sont repassés en paramètre de la classe FluentDecorator.
 Voici le code la méthode : 
 
 [source,java]
