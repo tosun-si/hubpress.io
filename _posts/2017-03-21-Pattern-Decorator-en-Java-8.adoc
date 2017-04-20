@@ -307,7 +307,7 @@ Dans les parties suivantes, nous allons voir d'autres façons d'implémenter le 
 == b) Decorator en Java 8 avec l'API Stream
 
 Dans cette partie nous allons voir qu'il est possible d'implémenter le pattern decorator avec l'API Stream.
-Nous allons créer une classe appelé "StreamDecorator" correspondant à une enum singleton (instance unique). Cette classe contient une méthode appelée "calculateProfit" qui sera exposée au client de l'API : 
+Nous allons créer une classe appelée "StreamDecorator" correspondant à une enum singleton (instance unique). Cette classe contient une méthode appelée "calculateProfit" qui sera exposée au client de l'API : 
 
 [source,java]
 ----
@@ -335,7 +335,7 @@ reduce(0, (a, b) -> a + b)
 ----
 
 On considère dans cet exemple que a et b sont des entiers.
-La fonction intiale est la valeur 0. La somme des éléments de la liste vont commencer avec la valeur par défaut et l'accumulateur "(a, b) -> a + b" va permettre de sommer chaque élement de la liste au fur et à mesure (somme le résultat de l'itération précédente avec le résultat de l'itération en cours). Si la structure est vide la valeur initiale est retournée, c'est à dire 0.
+La fonction intiale est la valeur 0. La somme des éléments de la liste va commencer avec la valeur par défaut et l'accumulateur "(a, b) -> a + b" va permettre de sommer chaque élement de la liste au fur et à mesure (somme le résultat de l'itération précédente avec le résultat de l'itération en cours). Si la structure est vide la valeur initiale est retournée, c'est à dire 0.
 
 Notre exemple suit le même principe, la fonction initiale est "DoubleUnaryOperator.identity()" et l'accumulateur est "DoubleUnaryOperator::andThen" ou "(ope1, ope2) -> ope1.andThen(ope2)". Comme vu précédemment, à chaque itération "andThen" va permettre de composer la fonction précédente avec la fonction en cours. Si la structure est vide "DoubleUnaryOperator.identity()" sera retourné (dans ce cas une fonction vide).
 
