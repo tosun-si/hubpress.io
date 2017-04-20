@@ -505,7 +505,7 @@ Voici le code du test avec tous les decorators :
   }
 ----
 
-Voici le test sans le decorator "ExceptionalExpenses" : 
+Le test sans le decorator "ExceptionalExpenses" : 
 
 [source,java]
 ----
