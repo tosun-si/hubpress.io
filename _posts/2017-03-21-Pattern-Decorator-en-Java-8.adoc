@@ -335,7 +335,7 @@ reduce(0, (a, b) -> a + b)
 ----
 
 On considère dans cet exemple que a et b sont des entiers.
-La fonction intiale est la valeur 0. La somme des éléments de la liste va commencer avec la valeur par défaut et l'accumulateur "(a, b) -> a + b" va permettre de sommer chaque élement de la liste au fur et à mesure (somme le résultat de l'itération précédente avec le résultat de l'itération en cours). Si la structure est vide la valeur initiale est retournée, c'est à dire 0.
+La fonction intiale est la valeur 0. Le calcul va commencer avec la valeur par défaut et l'accumulateur "(a, b) -> a + b" va permettre de sommer chaque élement de la liste au fur et à mesure (somme le résultat de l'itération précédente avec le résultat de l'itération en cours). Si la structure est vide la valeur initiale est retournée, c'est à dire 0.
 
 Notre exemple suit le même principe, la fonction initiale est "DoubleUnaryOperator.identity()" et l'accumulateur est "DoubleUnaryOperator::andThen" ou "(ope1, ope2) -> ope1.andThen(ope2)". Comme vu précédemment, à chaque itération "andThen" va permettre de composer la fonction précédente avec la fonction en cours. Si la structure est vide "DoubleUnaryOperator.identity()" sera retourné (dans ce cas une fonction vide).
 
@@ -391,7 +391,7 @@ Voici un exemple sans le decorator "ExceptionalExpenses" :
 == b) Decorator en Java 8 avec une API fluent
 
 Dans cette dernière partie nous allons voir qu'il est possible d'implémenter le pattern decorator via une API "fluent" et permettant d'indiquer clairement au client de l'API les traitements effectués.
-L'objectif va être de créer une classe Wrapper de type builder afin de composer nos fonctions de façon fluide.
+L'objectif va être de créer une classe wrapper de type builder afin de composer nos fonctions de façon fluide.
 
 Voici le code complet de la classe appelée FluentDecorator : 
 
@@ -458,7 +458,7 @@ La composition des decorator se fait via la méthode "with" qui prend en paramè
 new FluentDecorator<T>(this.value, function.andThen(otherFunction))
 ----
 
-La fonction globale est composé avec "otherFunction" (via andThen). La "value" globale (this.value) et le résultat de cette composition sont repassés en paramètre de la classe FluentDecorator.
+La fonction globale est composée avec "otherFunction" (via andThen). La "value" globale (this.value) et le résultat de cette composition sont repassés en paramètre de la classe FluentDecorator.
 Voici le code la méthode : 
 
 [source,java]
@@ -469,7 +469,7 @@ public FluentDecorator<T> with(final Function<T, T> otherFunction) {
 ----
 
 Lors de l'appel à la méthode "with", le traitement est lazy, non évalué et non executé (lazy evaluation). 
-Ceci constitue un des appports très interessant proposé par la programmation fonctionnelle. En effet l'implémentation de la fonction diffère du moment ou elle est évaluée, ce qui rend le code puissant car on peut décider de l'executer plus tard dans le programme. 
+Ceci constitue un des appports très interessant proposé par la programmation fonctionnelle. En effet l'implémentation de la fonction diffère du moment où elle est évaluée, ce qui rend le code très interessant car on peut décider de l'executer plus tard dans le programme. 
 
 Dans notre cas une méthode finale permet d'executer la fonction globale à la classe avec la valeur globale "function.apply(value)". Ainsi le résultat de la fonction est récupéré, c'est à dire le calcul du bénéfice : 
 
