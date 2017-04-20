@@ -195,7 +195,7 @@ Voici un second test qui n'applique pas tous les décorator, et montre qu'il est
 
 Au niveau du client de l'API nous avons la confirmation que ce pattern est interéssant à utiliser de part sa souplesse. Il suffit de créer un nouveau decorator pour un ajouter un nouveau calcul. Ainsi en cas d'évolution, la conception mise en place n'aura pas besoin d'être modifiée.
 
-Cependant nous constatons que la mise en place de ce patron de conception, est très verbeuse. Beaucoup de classes et de lignes de codes doivent être écrites pour arriver à l'objectif attendu. 
+Cependant nous constatons que la mise en place de ce patron de conception est très verbeuse. Beaucoup de classes et de lignes de codes doivent être écrites pour arriver à l'objectif attendu. 
 De plus, le fait qu'il soit orienté héritage peut rendre sa compréhénsion compliquée. Tous ces éléments peuvent dissuader le développeur à se lancer sur ce type de conception.
 
 Un des exemples de l'utilisation de ce pattern dans le JDK est la classe .....
