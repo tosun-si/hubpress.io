@@ -235,7 +235,7 @@ public class Expenses {
 
 Chaque méthode "static" effectue le calcul souhaité en se basant sur un double en entrée et en sortie.
 
-Nous allons ensuite montrer différente façons d'implémenter ce pattern en Java 8.
+Nous allons ensuite montrer différentes façons d'implémenter ce pattern en Java 8.
 
 == a) Decorator en Java 8 avec de la composition de fonctions
 
@@ -277,11 +277,11 @@ Et c'est tout... nous allons pouvoir désormais écrire notre decorator en Java 
   }
 ----
 
-N'est-ce pas grandiose ? nous avons pu réecrire le pattern décorator avec très peu de ligne de code. 
-Le JDK 8 donne la possibilité de composer plusieurs fonctions entre elles via la "default" méthode "andThen". Cette méthode est proposée dans les fonctions par défaut du JDK et le DoubleUnaryOperator en fait partie.
-On démarre à partir de la classe DefaultProfitCalculator, et via "andThen" on compose ce traitement avec une autre fonction. Dans cet exemple, des appels par référence de méthode ont été privilégiés afin d'avoir un code plus concis et plus expressif "Expenses::getOperatingExpenses", mais des lambdas expression auraient également fait l'affaire "e -> Expenses.getOperatingExpenses(e)".
+N'est-ce pas grandiose ? Nous avons pu réecrire le pattern décorator avec très peu de lignes de code. 
+Le JDK 8 donne la possibilité de composer plusieurs fonctions entre elles via la "default" méthode "andThen". Cette méthode est proposée dans les fonctions par défaut du JDK, dont le DoubleUnaryOperator fait partie.
+On démarre à partir de la classe DefaultProfitCalculator, et via "andThen" on compose ce traitement avec une autre fonction. Dans cet exemple, des appels par référence de méthode ont été privilégiés afin d'avoir un code plus concis et plus expressif (Expenses::getOperatingExpenses), mais des lambdas expression auraient également pu faire l'affaire (e -> Expenses.getOperatingExpenses(e)).
 
-Ainsi, il devient très simple d'ajouter ou de supprimer des decorators. Dans l'exemple ci dessous nous supprimons le decorator qui représente les dépenses exceptionnelles : 
+Ainsi, il devient très simple d'ajouter ou de supprimer des decorators. Dans l'exemple ci-dessous nous supprimons le decorator qui représente les dépenses exceptionnelles : 
 
 [source,java]
 ----
@@ -307,7 +307,7 @@ Dans les parties suivantes, nous allons voir d'autres façons d'implémenter le 
 
 == b) Decorator en Java 8 avec l'API Stream
 
-Dans cette partie nous allons voir qu'il est possible d'implémenter le pattern decorator avec l'API Stream.
+Nous allons voir maintenant qu'il est possible d'implémenter le pattern decorator avec l'API Stream.
 Nous allons créer une classe appelée "StreamDecorator" correspondant à une enum singleton (instance unique). Cette classe contient une méthode appelée "calculateProfit" qui sera exposée au client de l'API : 
 
 [source,java]
@@ -324,7 +324,7 @@ public enum StreamDecorator {
 }
 ----
 
-Le principe içi est de passer une suite de fonctions representée par des DoubleUnaryOperator (équivalent à un tableau de fonctions). La méthode prend également en paramètre le CA.
+Le principe ici est de passer une suite de fonctions representée par des DoubleUnaryOperator (équivalent à un tableau de fonctions). La méthode prend également en paramètre le CA.
 L'API stream propose une "factory method" "of" permettant d'initialiser une Stream à partir d'un tableau. Nous utilisons ensuite la méthode "reduce" qui permet de réduire les éléments du flux à une seule valeur.
 
 En programmation fonctionnelle le reduce correspond à du "fold". Le principe est de passer 2 fonctions, une initiale (et valeur par défaut) et l'autre permettant d'accumuler des éléments. Il devient très simple avec ce type d'opérateur de calculer la somme des élements d'une liste.
@@ -336,7 +336,7 @@ reduce(0, (a, b) -> a + b)
 ----
 
 On considère dans cet exemple que a et b sont des entiers.
-La fonction intiale est la valeur 0. Le calcul va commencer avec la valeur par défaut et l'accumulateur "(a, b) -> a + b" va permettre de sommer chaque élement de la liste au fur et à mesure (somme le résultat de l'itération précédente avec le résultat de l'itération en cours). Si la structure est vide la valeur initiale est retournée, c'est à dire 0.
+La fonction initiale est la valeur 0. Le calcul va commencer avec la valeur par défaut et l'accumulateur "(a, b) -> a + b" va permettre de sommer chaque élement de la liste au fur et à mesure (somme le résultat de l'itération précédente avec le résultat de l'itération en cours). Si la structure est vide la valeur initiale est retournée, c'est-à-dire 0.
 
 Notre exemple suit le même principe, la fonction initiale est "DoubleUnaryOperator.identity()" et l'accumulateur est "DoubleUnaryOperator::andThen" ou "(ope1, ope2) -> ope1.andThen(ope2)". Comme vu précédemment, à chaque itération "andThen" va permettre de composer la fonction précédente avec la fonction en cours. Si la structure est vide "DoubleUnaryOperator.identity()" sera retourné (dans ce cas une fonction vide).
 
