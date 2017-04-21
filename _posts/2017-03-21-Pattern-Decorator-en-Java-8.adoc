@@ -4,13 +4,13 @@
 
 == 1) Introduction
 
-L'objectif de cet article est de parler d'un des pattern du GOF (gang of four) assez connu, qui est le decorator.
+L'objectif de cet article est de parler de l'un des pattern du GOF (gang of four), assez connu, qui est le decorator.
 Ce patron de conception correspond à un design pattern de type comportement (behavioural pattern).
 
-En gros l'idée de ce pattern est d'ajouter du comportement à du code au runtime (c'est à dire à l'execution du code).
-Ce pattern présente de nombreux avantages car lorsque la conception a été mise en place, il devient très simple d'ajouter du comportement au code existant, ce qui le rend très evolutif.
+Pour résumer, l'idée de ce pattern est d'ajouter du comportement à du code au runtime (c'est à dire à l'exécution du code).
+Ce pattern présente de nombreux avantages car lorsque la conception est mise en place, il devient très simple d'ajouter du comportement au code existant, ce qui le rend très évolutif.
 
-Avant Java 8, malgré l'aspect interessant évoqué précédement, ce pattern n'était pas beaucoup utilisé car le code nécessaire à sa mise en place était très verbeux.
+Avant Java 8, malgré l'aspect intéressant évoqué précédement, ce pattern n'était pas beaucoup utilisé car le code nécessaire à sa mise en place était très verbeux.
 En effet le design de code était basé sur l'héritage, ce qui obligeait le développeur à écrire une classe par décorator, ainsi qu'une interface + une classe abstraite. La verbosité induite par ce type de dévéloppement pouvait décourager pas mal de développeurs.
 
 En Java 8 avec l'apport des lambdas, nous allons montrer que le decorator est beaucoup plus simple à implémenter, moins verbeux, fonctionnel et plus lisible pour le client de l'API.
