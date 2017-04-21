@@ -533,4 +533,3 @@ Le test sans le decorator "ExceptionalExpenses" :
 
 
 
-
