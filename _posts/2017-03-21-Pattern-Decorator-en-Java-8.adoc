@@ -4,7 +4,7 @@
 
 == 1) Introduction
 
-L'objectif de cette article est de parler d'un des pattern du GOF (gang of four) assez connu, qui est le decorator.
+L'objectif de cet article est de parler d'un des pattern du GOF (gang of four) assez connu, qui est le decorator.
 Ce patron de conception correspond à un design pattern de type comportement (behavioural pattern).
 
 En gros l'idée de ce pattern est d'ajouter du comportement à du code au runtime (c'est à dire à l'execution du code).
