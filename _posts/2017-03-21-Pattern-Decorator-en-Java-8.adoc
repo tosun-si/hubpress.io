@@ -35,6 +35,7 @@ Un calculateur de profit dispose d'une méthode abstraite "calculate", qui va ap
 
 Ensuite une classe abstraite doit être créée (classe mère de chaque decorator), nous allons l'appeler AbstractProfitDecorator : 
 
+
 [source,java]
 ----
 public abstract class AbstractProfitDecorator implements ProfitCalculator {
@@ -56,9 +57,9 @@ public abstract class AbstractProfitDecorator implements ProfitCalculator {
 ----
 
 Cette classe implémente l'interface précédente et doit donc proposer l'implémentation de la méthode "calculate(double turnover)". 
-Chaque décorator va appliquer une dépense en proposant l'implémentation de la méthode "applyExpense(double turnover)".
+Chaque decorator va appliquer une dépense en proposant l'implémentation de la méthode "applyExpense(double turnover)".
 
-Une subtilité est à constater içi, la classe prend également en paramètre l'interface "ProfitCalculator". 
+Une subtilité est à constater ici : la classe prend également en paramètre l'interface "ProfitCalculator". 
 En effet, chaque decorator va appliquer le calcul du decorator qui le précède et va ensuite y ajouter son calcul. C'est ce comportement qui permet d'ajouter des traitements au runtime.
 
 Nous allons commencer par une classe proposant un calcul par défaut appelée "DefaultProfitCalculator". Il est utile de commencer par une classe de type "profitCalculator" qui ne dépend de rien lors de son instantiation. Ceci correspond au calcul initial des decorators : 
@@ -124,7 +125,7 @@ public class ExceptionalExpensesDecorator extends AbstractProfitDecorator {
 }
 ----
 
-Taxes déductible => DeductibleTaxesDecorator : 
+Taxes déductibles => DeductibleTaxesDecorator : 
 [source,java]
 ----
 public class DeductibleTaxesDecorator extends AbstractProfitDecorator {
@@ -140,12 +141,12 @@ public class DeductibleTaxesDecorator extends AbstractProfitDecorator {
 }
 ----
 
-Le principe de chaque decorator est le même, chacun doit proposer une implémentation de la méthode "applyExpense". Il est à noter que les cas choisis dans cet article pour représenter le bénéfice d'une entreprise ne reflètent pas forcemment la réalité, mais servent juste d'exemple.
-Une "garbage class" appelée "Expenses" contient des méthodes "static" permettant de calculer chaque cas. Nous montrerons cette classe un peu plus tard.
+Le principe de chaque decorator est le même, chacun doit proposer une implémentation de la méthode "applyExpense". Il est à noter que les cas choisis dans cet article pour représenter le bénéfice d'une entreprise ne reflètent pas forcément la réalité, mais servent juste d'exemple.
+Une "garbage class" appelée "Expenses" contient des méthodes "static" permettant de calculer chaque cas. Nous présenterons cette classe un peu plus tard.
 
-Nous allons désormais passer aux tests d'intégration et à l'appel des décorators. 
+Nous allons désormais passer aux tests d'intégration et à l'appel des decorators. 
 
-Le premier test permet de composer tous les décorators : 
+Le premier test permet de composer tous les decorators : 
 
 [source,java]
 ----
@@ -168,10 +169,10 @@ Le premier test permet de composer tous les décorators :
   }
 ----
 
-Le calcul commence de droite à gauche, le point de départ est le DefaultProfitCalculator, ensuite cette classe est passée en paramètre du décorator OperatingExpensesDecorator et ainsi de suite.
-OperatingExpensesDecorator applique le calcul de DefaultProfitCalculator plus le sien.
+Le calcul commence de droite à gauche, le point de départ est le DefaultProfitCalculator; ensuite cette classe est passée en paramètre du décorator OperatingExpensesDecorator, et ainsi de suite.
+OperatingExpensesDecorator applique le calcul de DefaultProfitCalculator puis le sien.
 
-Voici un second test qui n'applique pas tous les décorator, et montre qu'il est très simple d'ajouter ou de supprimer un decorator au runtime. Le code peut ainsi être évolutif : 
+Voici un second test qui n'applique pas tous les decorators, et qui démontre qu'il est très simple d'ajouter ou de supprimer un decorator au runtime. Le code peut ainsi être évolutif : 
 
 [source,java]
 ----
@@ -193,14 +194,14 @@ Voici un second test qui n'applique pas tous les décorator, et montre qu'il est
   }
 ----
 
-Au niveau du client de l'API nous avons la confirmation que ce pattern est interéssant à utiliser de part sa souplesse. Il suffit de créer un nouveau decorator pour un ajouter un nouveau calcul. Ainsi en cas d'évolution, la conception mise en place n'aura pas besoin d'être modifiée.
+Au niveau du client de l'API nous avons la confirmation que ce pattern est intéressant à utiliser de par sa souplesse. Il suffit de créer un nouveau decorator pour ajouter un nouveau calcul. Ainsi en cas d'évolution, la conception mise en place n'aura pas besoin d'être modifiée.
 
 Cependant nous constatons que la mise en place de ce patron de conception est très verbeuse. Beaucoup de classes et de lignes de codes doivent être écrites pour arriver à l'objectif attendu. 
-De plus, le fait qu'il soit orienté héritage peut rendre sa compréhénsion compliquée. Tous ces éléments peuvent dissuader le développeur à se lancer sur ce type de conception.
+De plus, le fait qu'il soit orienté héritage peut rendre sa compréhension compliquée. Tous ces éléments peuvent dissuader le développeur de se lancer sur ce type de conception.
 
 Un des exemples de l'utilisation de ce pattern dans le JDK est la classe .....
 
-Nous allons voir dans la deuxième partie comment refaire le pattern decorator en Java 8 avec des lambdas et des fonctions. Nous verrons également que l'écriture est plus simple et beaucoup moins verbeuse.
+Nous allons voir dans la deuxième partie comment revisiter le pattern decorator en Java 8 avec des lambdas et des fonctions. Nous verrons également que l'écriture est plus simple et beaucoup moins verbeuse.
 
 == 2) Decorator en Java 8
 
