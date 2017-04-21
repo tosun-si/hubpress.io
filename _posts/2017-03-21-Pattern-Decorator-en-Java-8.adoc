@@ -7,15 +7,15 @@
 L'objectif de cet article est de parler de l'un des pattern du GOF (gang of four), assez connu, qui est le decorator.
 Ce patron de conception correspond à un design pattern de type comportement (behavioural pattern).
 
-Pour résumer, l'idée de ce pattern est d'ajouter du comportement à du code au runtime (c'est à dire à l'exécution du code).
-Ce pattern présente de nombreux avantages car lorsque la conception est mise en place, il devient très simple d'ajouter du comportement au code existant, ce qui le rend très évolutif.
+Pour résumer, l'idée de ce pattern est d'ajouter du comportement au code lors du runtime (c'est-à-dire à l'exécution du code).
+Ce pattern présente de nombreux avantages, car dès lors que la conception est mise en place, il devient très simple d'ajouter du comportement au code existant, ce qui le rend très évolutif.
 
 Avant Java 8, malgré l'aspect intéressant évoqué précédement, ce pattern n'était pas beaucoup utilisé car le code nécessaire à sa mise en place était très verbeux.
-En effet le design de code était basé sur l'héritage, ce qui obligeait le développeur à écrire une classe par décorator, ainsi qu'une interface + une classe abstraite. La verbosité induite par ce type de dévéloppement pouvait décourager pas mal de développeurs.
+En effet le design de code était basé sur l'héritage, ce qui obligeait le développeur à écrire une classe par décorator, ainsi qu'une interface accompagnée d'une classe abstraite. La verbosité induite par ce type de dévéloppement pouvait décourager pas mal de développeurs.
 
-En Java 8 avec l'apport des lambdas, nous allons montrer que le decorator est beaucoup plus simple à implémenter, moins verbeux, fonctionnel et plus lisible pour le client de l'API.
+En Java 8, avec l'arrivée des lambdas, nous allons montrer que le decorator est beaucoup plus simple à implémenter, moins verbeux, fonctionnel et plus lisible pour le client de l'API.
 
-L'article se décompose en 2 partie consistant à montrer le code et la conception du decorator avant et après Java 8. En Java 8 nous montrerons différentes techniques.
+L'article se décompose en 2 parties consistant à présenter le code et la conception du decorator avant et après Java 8. En Java 8 nous montrerons différentes techniques.
 
 L'exemple choisi pour illustrer ce pattern, est le calcul du bénéfice d'une entreprise. Chaque nouveau decorator permettra d'ajouter un calcul au runtime à la formule générale.
 
