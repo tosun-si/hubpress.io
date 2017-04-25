@@ -61,7 +61,7 @@ Chaque decorator va appliquer une dépense en proposant l'implémentation de la 
 Une subtilité est à constater ici : la classe prend également en paramètre l'interface "ProfitCalculator". + 
 En effet, chaque decorator va appliquer le calcul du decorator qui le précède et va ensuite y ajouter son calcul. C'est ce comportement qui permet d'ajouter des traitements au runtime.
 
-Nous allons commencer par une classe proposant un calcul par défaut appelée "DefaultProfitCalculator". Il est utile de commencer par une classe de type "profitCalculator" qui ne dépend de rien lors de son instantiation. Ceci correspond au calcul initial des decorators : 
+Nous allons commencer par une classe proposant un calcul par défaut appelée "DefaultProfitCalculator". Il est utile de commencer par une classe de type "ProfitCalculator" qui ne dépend de rien lors de son instantiation. Ceci correspond au calcul initial des decorators : 
 
 [source,java]
 ----
