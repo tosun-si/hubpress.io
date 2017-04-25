@@ -530,6 +530,12 @@ Le test sans le decorator "ExceptionalExpenses" :
   }
 ----
 
+== 3) Conclusion
 
+Cet article montre à quel point les lambdas et les fonctions, apportent au programme et aux développeurs. Le code en devient plus concis, expressif et paramètrable.
+De plus la programmation fonctionnelle est orienté composition, ce qui rend le code élégant, maintenable, évolutif et très compréhensible.
 
+Un des principes des pattern du GOF est de "favoriser la composition à l'héritage", cependant on constate que pas mal d'entres eux sont orientés héritage. Le problème de l'héritage étant que le moindre changement des objets parents, provoque un code qui ne fonctionne plus pour les éléments qui en héritent. L'héritage n'est pas évolutif et tend souvent vers un code verbeux.
+
+Les lambdas et fonctions permettent de donner beaucoup plus de possibiltés au développeur lorsqu'il designe son code. Certains pattern du GOF deviennent obsolètes et peuvent être revisités très élégament en Java 8.
 
