@@ -6,6 +6,7 @@
   },
   "site": {
     "title": "Mazlum TOSUN BLOG",
+    "description": "Articles sur Java, JEE et autres...",
     "cover": "/images/my_background.jpg",
     "disqus": "mazlum-tosun"
   },
