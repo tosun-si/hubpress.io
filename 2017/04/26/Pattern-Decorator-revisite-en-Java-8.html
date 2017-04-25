@@ -25,7 +25,7 @@
     <link href="/favicon.ico" rel="shortcut icon" type="image/x-icon">
     <link href="/apple-touch-icon-precomposed.png" rel="apple-touch-icon">
 
-    <link rel="stylesheet" type="text/css" href="//tosun-si.github.io/themes/my-uno/assets/css/uno.css?v=1493160055938" />
+    <link rel="stylesheet" type="text/css" href="//tosun-si.github.io/themes/my-uno/assets/css/uno.css?v=1493160127332" />
 
     <link rel="canonical" href="https://tosun-si.github.io/2017/04/26/Pattern-Decorator-revisite-en-Java-8.html" />
     <meta name="referrer" content="origin" />
@@ -236,7 +236,7 @@ Chaque decorator va appliquer une dépense en proposant l&#8217;implémentation 
 En effet, chaque decorator va appliquer le calcul du decorator qui le précède et va ensuite y ajouter son calcul. C&#8217;est ce comportement qui permet d&#8217;ajouter des traitements au runtime.</p>
 </div>
 <div class="paragraph">
-<p>Nous allons commencer par une classe proposant un calcul par défaut appelée "DefaultProfitCalculator". Il est utile de commencer par une classe de type "profitCalculator" qui ne dépend de rien lors de son instantiation. Ceci correspond au calcul initial des decorators :</p>
+<p>Nous allons commencer par une classe proposant un calcul par défaut appelée "DefaultProfitCalculator". Il est utile de commencer par une classe de type "ProfitCalculator" qui ne dépend de rien lors de son instantiation. Ceci correspond au calcul initial des decorators :</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -830,7 +830,7 @@ De plus la programmation fonctionnelle est orientée composition, ce qui rend le
         hljs.initHighlightingOnLoad();
       </script>
 
-    <script type="text/javascript" src="//tosun-si.github.io/themes/my-uno/assets/js/main.js?v=1493160055938"></script>
+    <script type="text/javascript" src="//tosun-si.github.io/themes/my-uno/assets/js/main.js?v=1493160127332"></script>
     
 
 </body>
