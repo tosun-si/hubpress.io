@@ -510,7 +510,7 @@ Le test sans le decorator "ExceptionalExpenses" :
 
 [source,java]
 ----
-@Test
+  @Test
   public void givenTurnover_whenNotComposingAllDecoratorsWithFluentStyle_thenCorrectResult() {
 
     // Given.
@@ -540,5 +540,5 @@ Un des principes des pattern du GOF est de "favoriser la composition à l'hérit
 - Le code n'est pas évolutif.
 - Le code est verbeux.
 
-Les lambdas et fonctions permettent de donner beaucoup plus de possibiltés au développeur lorsqu'il designe son code. Certains pattern du GOF deviennent obsolètes et peuvent être revisités très élégamment en Java 8.
+Les lambdas et fonctions permettent de donner beaucoup plus de possibiltés au développeur lorsqu'il fait sa conception de code. Certains pattern du GOF deviennent obsolètes et peuvent être revisités très élégamment en Java 8.
 
