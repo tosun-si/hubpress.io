@@ -546,3 +546,17 @@ Un des principes des pattern du GOF est de "favoriser la composition à l'hérit
 
 Les lambdas et fonctions permettent de donner beaucoup plus de possibiltés au développeur lorsqu'il fait sa conception de code. Certains pattern du GOF deviennent obsolètes et peuvent être revisités très élégamment en Java 8.
 
+
+
+Le code présenté dans cet article est accessible via les liens github suivants : 
+https://github.com/tosun-si/java8-example
+
+Java 7 :
+https://github.com/tosun-si/java8-example/tree/master/src/main/java/com/tosunsi/example/designpattern/java7/decorator
+https://github.com/tosun-si/java8-example/blob/master/src/test/java/com/tosunsi/example/designpattern/java7/decorator/DecoratorJava7Test.java
+
+Java 8 : 
+https://github.com/tosun-si/java8-example/tree/master/src/main/java/com/tosunsi/example/designpattern/java8/decorator
+https://github.com/tosun-si/java8-example/blob/master/src/test/java/com/tosunsi/example/designpattern/java8/decorator/DecoratorJava8Test.java
+
+
