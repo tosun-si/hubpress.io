@@ -535,7 +535,7 @@ Le test sans le decorator "ExceptionalExpenses" :
 Cet article montre à quel point les lambdas et les fonctions, apportent au programme et aux développeurs. Le code en devient plus concis, expressif et paramètrable.
 De plus la programmation fonctionnelle est orientée composition, ce qui rend le code élégant, maintenable, évolutif et très compréhensible.
 
-Un des principes des pattern du GOF est de "favoriser la composition à l'héritage", cependant on constate que pas mal d'entres eux sont orientés héritage, ce qui provoque pas mal de problèmes :  
+Un des principes des pattern du GOF est de "favoriser la composition à l'héritage", cependant on constate que pas mal d'entre eux sont orientés héritage, ce qui provoque pas mal de problèmes :  
 - Le moindre changement des objets parents, provoque un code, qui ne fonctionne plus pour les éléments qui en héritent. 
 - Le code n'est pas évolutif.
 - Le code est verbeux.
