@@ -1,4 +1,4 @@
-= Pattern Decorator en Java 8
+= Pattern Decorator revisité en Java 8
 :published_at: 2017-03-21
 :source-highlighter: highlightjs
 
