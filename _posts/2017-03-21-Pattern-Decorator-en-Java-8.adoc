@@ -198,7 +198,12 @@ Au niveau du client de l'API nous avons la confirmation que ce pattern est inté
 Cependant nous constatons que la mise en place de ce patron de conception est très verbeuse. Beaucoup de classes et de lignes de codes doivent être écrites pour arriver à l'objectif attendu. +
 De plus, le fait qu'il soit orienté héritage peut rendre sa compréhension compliquée. Tous ces éléments peuvent dissuader le développeur de se lancer sur ce type de conception.
 
-Un des exemples de l'utilisation de ce pattern dans le JDK est la classe .....
+Un des exemples de l'utilisation de ce pattern dans le JDK :
+
+[source,java]
+----
+new DataInputStream(new BufferedInputStream(new FileInputStream(new File("PATH"))));
+----
 
 Nous allons voir dans la deuxième partie comment revisiter le pattern decorator en Java 8 avec des lambdas et des fonctions. Nous verrons également que l'écriture est plus simple et beaucoup moins verbeuse.
 
