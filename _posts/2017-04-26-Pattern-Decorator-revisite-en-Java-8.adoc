@@ -1,5 +1,5 @@
 = Pattern Decorator revisité en Java 8
-:published_at: 2017-03-21
+:published_at: 2017-04-26
 :source-highlighter: highlightjs
 
 == 1) Introduction
