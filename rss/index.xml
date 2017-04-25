@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Mazlum TOSUN BLOG]]></title><description><![CDATA[Articles sur Java, JEE et autres...]]></description><link>https://tosun-si.github.io</link><image><url>/images/my_background.jpg</url><title>Mazlum TOSUN BLOG</title><link>https://tosun-si.github.io</link></image><generator>RSS for Node</generator><lastBuildDate>Tue, 25 Apr 2017 22:44:59 GMT</lastBuildDate><atom:link href="https://tosun-si.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Pattern Decorator revisité en Java 8]]></title><description><![CDATA[<div class="sect1">
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Mazlum TOSUN BLOG]]></title><description><![CDATA[Articles sur Java, JEE et autres...]]></description><link>https://tosun-si.github.io</link><image><url>/images/my_background.jpg</url><title>Mazlum TOSUN BLOG</title><link>https://tosun-si.github.io</link></image><generator>RSS for Node</generator><lastBuildDate>Tue, 25 Apr 2017 23:04:23 GMT</lastBuildDate><atom:link href="https://tosun-si.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Pattern Decorator revisité en Java 8]]></title><description><![CDATA[<div class="sect1">
 <h2 id="_1_introduction">1) Introduction</h2>
 <div class="sectionbody">
 <div class="paragraph">
@@ -620,6 +620,20 @@ De plus la programmation fonctionnelle est orientée composition, ce qui rend le
 </div>
 <div class="paragraph">
 <p>Les lambdas et fonctions permettent de donner beaucoup plus de possibiltés au développeur lorsqu&#8217;il fait sa conception de code. Certains pattern du GOF deviennent obsolètes et peuvent être revisités très élégamment en Java 8.</p>
+</div>
+<div class="paragraph">
+<p>Le code présenté dans cet article est accessible via les liens github suivants :
+<a href="https://github.com/tosun-si/java8-example" class="bare">https://github.com/tosun-si/java8-example</a></p>
+</div>
+<div class="paragraph">
+<p>Java 7 :
+<a href="https://github.com/tosun-si/java8-example/tree/master/src/main/java/com/tosunsi/example/designpattern/java7/decorator" class="bare">https://github.com/tosun-si/java8-example/tree/master/src/main/java/com/tosunsi/example/designpattern/java7/decorator</a>
+<a href="https://github.com/tosun-si/java8-example/blob/master/src/test/java/com/tosunsi/example/designpattern/java7/decorator/DecoratorJava7Test.java" class="bare">https://github.com/tosun-si/java8-example/blob/master/src/test/java/com/tosunsi/example/designpattern/java7/decorator/DecoratorJava7Test.java</a></p>
+</div>
+<div class="paragraph">
+<p>Java 8 :
+<a href="https://github.com/tosun-si/java8-example/tree/master/src/main/java/com/tosunsi/example/designpattern/java8/decorator" class="bare">https://github.com/tosun-si/java8-example/tree/master/src/main/java/com/tosunsi/example/designpattern/java8/decorator</a>
+<a href="https://github.com/tosun-si/java8-example/blob/master/src/test/java/com/tosunsi/example/designpattern/java8/decorator/DecoratorJava8Test.java" class="bare">https://github.com/tosun-si/java8-example/blob/master/src/test/java/com/tosunsi/example/designpattern/java8/decorator/DecoratorJava8Test.java</a></p>
 </div>
 </div>
 </div>]]></description><link>https://tosun-si.github.io/2017/04/26/Pattern-Decorator-revisite-en-Java-8.html</link><guid isPermaLink="true">https://tosun-si.github.io/2017/04/26/Pattern-Decorator-revisite-en-Java-8.html</guid><pubDate>Wed, 26 Apr 2017 00:00:00 GMT</pubDate></item><item><title><![CDATA[Fluent iterable Java 8]]></title><description><![CDATA[<div class="sect1">
