@@ -1,4 +1,642 @@
-<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Mazlum TOSUN BLOG]]></title><description><![CDATA[Articles sur Java, JEE et autres...]]></description><link>https://tosun-si.github.io</link><image><url>/images/my_background.jpg</url><title>Mazlum TOSUN BLOG</title><link>https://tosun-si.github.io</link></image><generator>RSS for Node</generator><lastBuildDate>Wed, 26 Apr 2017 08:52:42 GMT</lastBuildDate><atom:link href="https://tosun-si.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Fluent iterable Java 8]]></title><description><![CDATA[<div class="sect1">
+<?xml version="1.0" encoding="UTF-8"?><rss xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:atom="http://www.w3.org/2005/Atom" version="2.0"><channel><title><![CDATA[Mazlum TOSUN BLOG]]></title><description><![CDATA[Articles sur Java, JEE et autres...]]></description><link>https://tosun-si.github.io</link><image><url>/images/my_background.jpg</url><title>Mazlum TOSUN BLOG</title><link>https://tosun-si.github.io</link></image><generator>RSS for Node</generator><lastBuildDate>Wed, 26 Apr 2017 08:52:54 GMT</lastBuildDate><atom:link href="https://tosun-si.github.io/rss/" rel="self" type="application/rss+xml"/><ttl>60</ttl><item><title><![CDATA[Pattern Decorator revisité en Java 8]]></title><description><![CDATA[<div class="sect1">
+<h2 id="_1_introduction">1) Introduction</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>L&#8217;objectif de cet article est de parler de l&#8217;un des pattern du GOF (gang of four), assez connu, qui est le decorator.<br>
+Ce patron de conception correspond à un design pattern de type comportement (behavioural pattern).</p>
+</div>
+<div class="paragraph">
+<p>Pour résumer, l&#8217;idée de ce pattern est d&#8217;ajouter du comportement au code au runtime (c&#8217;est-à-dire à l&#8217;exécution du code).<br>
+Ce pattern présente de nombreux avantages, car dès lors que la conception est mise en place, il devient très simple d&#8217;ajouter du comportement au code existant, ce qui le rend très évolutif.</p>
+</div>
+<div class="paragraph">
+<p>Avant Java 8, malgré l&#8217;aspect intéressant évoqué précédement, ce pattern n'était pas beaucoup utilisé car le code nécessaire à sa mise en place était très verbeux.<br>
+En effet le design de code était basé sur l&#8217;héritage, ce qui obligeait le développeur à écrire une classe par décorator, ainsi qu&#8217;une interface accompagnée d&#8217;une classe abstraite. La verbosité induite par ce type de dévéloppement pouvait décourager pas mal de développeurs.</p>
+</div>
+<div class="paragraph">
+<p>En Java 8, avec l&#8217;arrivée des lambdas, nous allons montrer que le decorator est beaucoup plus simple à implémenter, moins verbeux, fonctionnel et plus lisible pour le client de l&#8217;API.</p>
+</div>
+<div class="paragraph">
+<p>L&#8217;article se décompose en 2 parties consistant à présenter le code et la conception du decorator avant et après Java 8. En Java 8 nous montrerons différentes techniques.</p>
+</div>
+<div class="paragraph">
+<p>L&#8217;exemple choisi pour illustrer ce pattern, est le calcul du bénéfice d&#8217;une entreprise. Chaque nouveau decorator permettra d&#8217;ajouter un calcul au runtime à la formule générale.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_2_decorator_en_java_7">2) Decorator en Java 7</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Premièrement une interface définissant le contrat doit être créée, nous allons l&#8217;appeler ProfitCalculator (calculateur de bénéfice). Voici le code de cette interface :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">public interface ProfitCalculator {
+
+  double calculate(double turnover);
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Un calculateur de profit dispose d&#8217;une méthode abstraite "calculate", qui va appliquer un nouveau calcul au CA passé en paramètre.</p>
+</div>
+<div class="paragraph">
+<p>Ensuite une classe abstraite doit être créée (classe mère de chaque decorator), nous allons l&#8217;appeler AbstractProfitDecorator :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">public abstract class AbstractProfitDecorator implements ProfitCalculator {
+
+  private final ProfitCalculator profitCalculator;
+
+  public AbstractProfitDecorator(ProfitCalculator profitCalculator) {
+    this.profitCalculator = profitCalculator;
+  }
+
+  protected abstract double applyExpense(double turnover);
+
+  @Override
+  public double calculate(double turnover) {
+    double profit = profitCalculator.calculate(turnover);
+    return applyExpense(profit);
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Cette classe implémente l&#8217;interface précédente et doit donc proposer l&#8217;implémentation de la méthode "calculate(double turnover)".<br>
+Chaque decorator va appliquer une dépense en proposant l&#8217;implémentation de la méthode "applyExpense(double turnover)".</p>
+</div>
+<div class="paragraph">
+<p>Une subtilité est à constater ici : la classe prend également en paramètre l&#8217;interface "ProfitCalculator".<br>
+En effet, chaque decorator va appliquer le calcul du decorator qui le précède et va ensuite y ajouter son calcul. C&#8217;est ce comportement qui permet d&#8217;ajouter des traitements au runtime.</p>
+</div>
+<div class="paragraph">
+<p>Nous allons commencer par une classe proposant un calcul par défaut appelée "DefaultProfitCalculator". Il est utile de commencer par une classe de type "ProfitCalculator" qui ne dépend de rien lors de son instantiation. Ceci correspond au calcul initial des decorators :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">public class DefaultProfitCalculator implements ProfitCalculator {
+
+  @Override
+  public double calculate(double turnover) {
+    return Expenses.getTransportExpenses(turnover);
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Nous allons ensuite montrer le code des différents decorators :</p>
+</div>
+<div class="paragraph">
+<p>Charges d&#8217;exploitation &#8658; OperatingExpensesDecorator :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">public class OperatingExpensesDecorator extends AbstractProfitDecorator {
+
+  public OperatingExpensesDecorator(ProfitCalculator profitCalculator) {
+    super(profitCalculator);
+  }
+
+  @Override
+  protected double applyExpense(double turnover) {
+    return Expenses.getOperatingExpenses(turnover);
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Rémunération &#8658; RemunerationDecorator :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">public class RemunerationDecorator extends AbstractProfitDecorator {
+
+  public RemunerationDecorator(ProfitCalculator profitCalculator) {
+    super(profitCalculator);
+  }
+
+  @Override
+  protected double applyExpense(double turnover) {
+    return Expenses.getRemuneration(turnover);
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Dépenses exceptionnelles &#8658; ExceptionalExpensesDecorator :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">public class ExceptionalExpensesDecorator extends AbstractProfitDecorator {
+
+  public ExceptionalExpensesDecorator(ProfitCalculator profitCalculator) {
+    super(profitCalculator);
+  }
+
+  @Override
+  protected double applyExpense(double turnover) {
+    return Expenses.getExceptionalExpenses(turnover);
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Taxes déductibles &#8658; DeductibleTaxesDecorator :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">public class DeductibleTaxesDecorator extends AbstractProfitDecorator {
+
+  public DeductibleTaxesDecorator(ProfitCalculator profitCalculator) {
+    super(profitCalculator);
+  }
+
+  @Override
+  protected double applyExpense(double turnover) {
+    return Expenses.getDeductibleTaxes(turnover);
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Le principe de chaque decorator est le même, chacun doit proposer une implémentation de la méthode "applyExpense". Il est à noter que les cas choisis dans cet article pour représenter le bénéfice d&#8217;une entreprise ne reflètent pas forcément la réalité, mais servent juste d&#8217;exemple.<br>
+Une "garbage class" appelée "Expenses" contient des méthodes "static" permettant de calculer chaque cas. Nous présenterons cette classe un peu plus tard.</p>
+</div>
+<div class="paragraph">
+<p>Nous allons désormais passer aux tests d&#8217;intégration et à l&#8217;appel des decorators.</p>
+</div>
+<div class="paragraph">
+<p>Le premier test permet de composer tous les decorators :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">  @Test
+  public void givenTurnover_whenComposingAllDecorators_thenCorrectResult() {
+
+    // Given.
+    final double turnover = 100000;
+
+    // When.
+    final double profit = new ExceptionalExpensesDecorator
+                            (new RemunerationDecorator
+                               (new DeductibleTaxesDecorator
+                                  (new OperatingExpensesDecorator
+                                     (new DefaultProfitCalculator()))))
+                                     .calculate(turnover);
+
+    // Then.
+    assertThat(profit).isNotNull().isEqualTo(32600);
+  }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Le calcul commence de droite à gauche, le point de départ est le DefaultProfitCalculator; ensuite cette classe est passée en paramètre du décorator OperatingExpensesDecorator, et ainsi de suite.<br>
+OperatingExpensesDecorator applique le calcul de DefaultProfitCalculator puis le sien.</p>
+</div>
+<div class="paragraph">
+<p>Voici un second test qui n&#8217;applique pas tous les decorators, et qui démontre qu&#8217;il est très simple d&#8217;ajouter ou de supprimer un decorator au runtime. Le code peut ainsi être évolutif :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">  @Test
+  public void givenTurnover_whenNotComposingAllDecorators_thenCorrectResult() {
+
+    // Given.
+    final double turnover = 100000;
+
+    // When.
+    final double profit = new RemunerationDecorator
+                            (new DeductibleTaxesDecorator
+                               (new OperatingExpensesDecorator
+                                  (new DefaultProfitCalculator())))
+                                  .calculate(turnover);
+
+    // Then.
+    assertThat(profit).isNotNull().isEqualTo(34600);
+  }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Au niveau du client de l&#8217;API nous avons la confirmation que ce pattern est intéressant à utiliser de par sa souplesse. Il suffit de créer un nouveau decorator pour ajouter un nouveau calcul. Ainsi en cas d'évolution, la conception mise en place n&#8217;aura pas besoin d'être modifiée.</p>
+</div>
+<div class="paragraph">
+<p>Cependant nous constatons que la mise en place de ce patron de conception est très verbeuse. Beaucoup de classes et de lignes de codes doivent être écrites pour arriver à l&#8217;objectif attendu.<br>
+De plus, le fait qu&#8217;il soit orienté héritage peut rendre sa compréhension compliquée. Tous ces éléments peuvent dissuader le développeur de se lancer sur ce type de conception.</p>
+</div>
+<div class="paragraph">
+<p>Un des exemples de l&#8217;utilisation de ce pattern dans le JDK :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">new DataInputStream(new BufferedInputStream(new FileInputStream(new File("PATH"))));</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Nous allons voir dans la deuxième partie comment revisiter le pattern decorator en Java 8 avec des lambdas et des fonctions. Nous verrons également que l'écriture est plus simple et beaucoup moins verbeuse.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_2_decorator_en_java_8">2) Decorator en Java 8</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Nous allons commencer par montrer les méthodes "static" proposées par la garbage class "Expenses" :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">public class Expenses {
+
+  public static double getTransportExpenses(final double turnover) {
+    return turnover - 2400;
+  }
+
+  public static double getOperatingExpenses(final double turnover) {
+    return turnover - 15000;
+  }
+
+  public static double getDeductibleTaxes(final double turnover) {
+    return turnover - 3000;
+  }
+
+  public static double getRemuneration(final double turnover) {
+    return turnover - 45000;
+  }
+
+  public static double getExceptionalExpenses(final double turnover) {
+    return turnover - 2000;
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Chaque méthode "static" effectue le calcul souhaité en se basant sur un double en entrée et en sortie.</p>
+</div>
+<div class="paragraph">
+<p>Nous allons ensuite montrer différentes façons d&#8217;implémenter ce pattern en Java 8.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_a_decorator_en_java_8_avec_de_la_composition_de_fonctions">a) Decorator en Java 8 avec de la composition de fonctions</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Comme pour la partie Java 7 nous allons écrire une classe contenant le calcul par défaut :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">public class DefaultProfitCalculator implements DoubleUnaryOperator {
+
+  @Override
+  public double applyAsDouble(final double operand) {
+    return Expenses.getTransportExpenses(operand);
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Cette classe implémente une interface fonctionnelle (= à une fonction) proposée par défaut dans le JDK 8 "DoubleUnaryOperator". Cette fonction prend un double en entrée et retourne un double en sortie, ce qui correspond à la signature des calculs présents dans la classe Expenses. L&#8217;implémentation de la méthode applyAsDouble est effectuée avec un calcul par défaut.</p>
+</div>
+<div class="paragraph">
+<p>Et c&#8217;est tout&#8230;&#8203; nous allons pouvoir désormais écrire notre decorator en Java 8 via un test :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">  @Test
+  public void givenTurnover_whenComposingAllDecoratorsWithAndThen_thenCorrectResult() {
+
+    // Given.
+    final double turnover = 100000;
+
+    // When.
+    final double profit = new DefaultProfitCalculator()
+                             .andThen(Expenses::getOperatingExpenses)
+                             .andThen(Expenses::getDeductibleTaxes)
+                             .andThen(Expenses::getRemuneration)
+                             .andThen(Expenses::getExceptionalExpenses)
+                             .applyAsDouble(turnover);
+
+    // Then.
+    assertThat(profit).isNotNull().isEqualTo(32600);
+  }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>N&#8217;est-ce pas grandiose ? Nous avons pu réecrire le pattern décorator avec très peu de lignes de code.<br>
+Le JDK 8 donne la possibilité de composer plusieurs fonctions entre elles via la "default" méthode "andThen". Cette méthode est proposée dans les fonctions par défaut du JDK, dont le DoubleUnaryOperator fait partie.<br>
+On démarre à partir de la classe DefaultProfitCalculator, et via "andThen" on compose ce traitement avec une autre fonction. Dans cet exemple, des appels par référence de méthode ont été privilégiés afin d&#8217;avoir un code plus concis et plus expressif (Expenses::getOperatingExpenses), mais des lambdas expression auraient également pu faire l&#8217;affaire (e &#8594; Expenses.getOperatingExpenses(e)).</p>
+</div>
+<div class="paragraph">
+<p>Ainsi, il devient très simple d&#8217;ajouter ou de supprimer des decorators. Dans l&#8217;exemple ci-dessous nous supprimons le decorator qui représente les dépenses exceptionnelles :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">  @Test
+  public void givenTurnover_whenNotComposingAllDecoratorsWithAndThen_thenCorrectResult() {
+
+    // Given.
+    final double turnover = 100000;
+
+    // When.
+    final double profit = new DefaultProfitCalculator()
+                             .andThen(Expenses::getOperatingExpenses)
+                             .andThen(Expenses::getDeductibleTaxes)
+                             .andThen(Expenses::getRemuneration)
+                             .applyAsDouble(turnover);
+
+    // Then.
+    assertThat(profit).isNotNull().isEqualTo(34600);
+  }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Dans les parties suivantes, nous allons voir d&#8217;autres façons d&#8217;implémenter le pattern decorator en Java 8.</p>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_b_decorator_en_java_8_avec_l_api_stream">b) Decorator en Java 8 avec l&#8217;API Stream</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Nous allons voir maintenant qu&#8217;il est possible d&#8217;implémenter le pattern decorator avec l&#8217;API Stream.<br>
+Nous allons créer une classe appelée "StreamDecorator" correspondant à une enum singleton (instance unique). Cette classe contient une méthode appelée "calculateProfit" qui sera exposée au client de l&#8217;API :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">public enum StreamDecorator {
+
+  // Single instance.
+  INSTANCE;
+
+  public double calculateProfit(final double turnover, final DoubleUnaryOperator... operators) {
+    return Stream.of(operators).reduce(DoubleUnaryOperator.identity(), DoubleUnaryOperator::andThen)
+                               .applyAsDouble(turnover);
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Le principe ici est de passer une suite de fonctions representée par des DoubleUnaryOperator (équivalent à un tableau de fonctions). La méthode prend également en paramètre le CA.<br>
+L&#8217;API stream propose une "factory method" "of" permettant d&#8217;initialiser une Stream à partir d&#8217;un tableau. Nous utilisons ensuite la méthode "reduce" qui permet de réduire les éléments du flux à une seule valeur.</p>
+</div>
+<div class="paragraph">
+<p>En programmation fonctionnelle le reduce correspond à du "fold". Le principe est de passer 2 fonctions, une initiale (et valeur par défaut) et l&#8217;autre permettant d&#8217;accumuler des éléments. Il devient très simple avec ce type d&#8217;opérateur de calculer la somme des élements d&#8217;une liste.<br>
+Par exemple :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">reduce(0, (a, b) -&gt; a + b)</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>On considère dans cet exemple que a et b sont des entiers.<br>
+La fonction initiale est la valeur 0. Le calcul va commencer avec la valeur par défaut et l&#8217;accumulateur "(a, b) &#8594; a + b" va permettre de sommer chaque élement de la liste au fur et à mesure (somme le résultat de l&#8217;itération précédente avec le résultat de l&#8217;itération en cours). Si la structure est vide la valeur initiale est retournée, c&#8217;est-à-dire 0.</p>
+</div>
+<div class="paragraph">
+<p>Notre exemple suit le même principe, la fonction initiale est "DoubleUnaryOperator.identity()" et l&#8217;accumulateur est "DoubleUnaryOperator::andThen" ou "(ope1, ope2) &#8594; ope1.andThen(ope2)". Comme vu précédemment, à chaque itération "andThen" va permettre de composer la fonction précédente avec la fonction en cours. Si la structure est vide "DoubleUnaryOperator.identity()" sera retourné (dans ce cas une fonction vide).</p>
+</div>
+<div class="paragraph">
+<p>Voici le code du test utilisant un exemple avec tous les decorators :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">  @Test
+  public void givenTurnover_whenComposingAllDecoratorsWithStream_thenCorrectResult() {
+
+    // Given.
+    final double turnover = 100000;
+
+    // When.
+    final double profit = StreamDecorator.INSTANCE.calculateProfit(turnover
+                             , new DefaultProfitCalculator()
+                             , Expenses::getOperatingExpenses
+                             , Expenses::getDeductibleTaxes
+                             , Expenses::getRemuneration
+                             , Expenses::getExceptionalExpenses);
+
+    // Then.
+    assertThat(profit).isNotNull().isEqualTo(32600);
+  }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>La méthode "calculateProfit" est appelée avec le CA et la liste des fonctions decorator séparées par une virgule (rendu possible grâce au paramètre de la méthode suivante &#8658; "DoubleUnaryOperator&#8230;&#8203; operators").<br>
+De nouveau le client de l&#8217;API dispose d&#8217;un traitement très souple, facilement modifiable et évolutif.</p>
+</div>
+<div class="paragraph">
+<p>Voici un exemple sans le decorator "ExceptionalExpenses" :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">  @Test
+  public void givenTurnover_whenNotComposingAllDecoratorsWithStream_thenCorrectResult() {
+
+    // Given.
+    final double turnover = 100000;
+
+    // When.
+    final double profit = StreamDecorator.INSTANCE.calculateProfit(turnover
+                             , new DefaultProfitCalculator()
+                             , Expenses::getOperatingExpenses
+                             , Expenses::getDeductibleTaxes
+                             , Expenses::getRemuneration);
+
+    // Then.
+    assertThat(profit).isNotNull().isEqualTo(34600);
+  }</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_b_decorator_en_java_8_avec_une_api_fluent">b) Decorator en Java 8 avec une API fluent</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Dans cette dernière partie nous allons voir qu&#8217;il est possible d&#8217;implémenter le pattern decorator via une API "fluent", permettant d&#8217;indiquer clairement au client de l&#8217;API les traitements effectués.<br>
+L&#8217;objectif va être de créer une classe wrapper de type builder afin de composer nos fonctions de façon fluide.</p>
+</div>
+<div class="paragraph">
+<p>Voici le code complet de la classe appelée FluentDecorator :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">public final class FluentDecorator&lt;T&gt; {
+
+  private final T value;
+  private final Function&lt;T, T&gt; function;
+
+  private FluentDecorator(final T value, Function&lt;T, T&gt; function) {
+    this.value = value;
+    this.function = function;
+  }
+
+  public static &lt;T&gt; FluentDecorator&lt;T&gt; from(final T value) {
+    Objects.requireNonNull(value);
+    return new FluentDecorator&lt;&gt;(value, Function.identity());
+  }
+
+  public FluentDecorator&lt;T&gt; with(final Function&lt;T, T&gt; otherFunction) {
+    return new FluentDecorator&lt;&gt;(this.value, function.andThen(otherFunction));
+  }
+
+  public T calculate() {
+    return this.function.apply(value);
+  }
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Le fluent decorator se base sur une valeur de type T (n&#8217;importe quel type via les Generics en Java) et enveloppe une Function&lt;T,T&gt;, c&#8217;est-à-dire une fonction prenant un élément de type T en entrée en retournant un élement du même type (comme le DoubleUnaryOperator).</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">  private final T value;
+  private final Function&lt;T, T&gt; function;</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Un constructeur privé prend en paramètre les 2 éléments expliqués précédemment (l&#8217;aspect privé permet d&#8217;empêcher l&#8217;instantiation en dehors de la classe) :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">private FluentDecorator(final T value, Function&lt;T, T&gt; function) {
+    this.value = value;
+    this.function = function;
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Une "static factory method" est exposée au client de l&#8217;API pour initialiser la classe avec un nom parlant. Cette méthode s&#8217;appelle "from" et prend en paramètre la valeur qui servira de base de calcul, dans notre cas le CA.<br>
+Un contrôle est effectué sur la valeur afin de renvoyer une "runtime exception" si elle est nulle. Le constructeur de la classe est appelé avec cette valeur et une fonction initiale vide (ainsi le paramètre global "function" de la classe ne sera pas nul et ceci permettra d'éviter des nullPointerException).</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">public static &lt;T&gt; FluentDecorator&lt;T&gt; from(final T value) {
+    Objects.requireNonNull(value);
+    return new FluentDecorator&lt;&gt;(value, Function.identity());
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>La composition des decorators se fait via la méthode "with" qui prend en paramètre la fonction à ajouter à la composition générale. Le but est de rappeler de nouveau le constructeur de la classe, mais cette fois-ci de la façon suivante :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">new FluentDecorator&lt;T&gt;(this.value, function.andThen(otherFunction))</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>La fonction globale est composée avec "otherFunction" (via andThen). La "value" globale (this.value) et le résultat de cette composition sont repassés en paramètres de la classe FluentDecorator.
+Voici le code la méthode :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">public FluentDecorator&lt;T&gt; with(final Function&lt;T, T&gt; otherFunction) {
+    return new FluentDecorator&lt;T&gt;(this.value, function.andThen(otherFunction));
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Lors de l&#8217;appel à la méthode "with", le traitement est lazy, non évalué et non executé (lazy evaluation).
+Ceci constitue l&#8217;un des appports très interessants proposés par la programmation fonctionnelle. En effet l&#8217;implémentation de la fonction diffère du moment où elle est évaluée, ce qui rend le code très intéressant car on peut décider de l&#8217;exécuter plus tard dans le programme.</p>
+</div>
+<div class="paragraph">
+<p>Dans notre cas une méthode finale permet d&#8217;exécuter la fonction globale à la classe avec la valeur globale "function.apply(value)". Ainsi le résultat de la fonction, dans notre cas le calcul du bénéfice, est récupéré :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">public T calculate() {
+    return this.function.apply(value);
+}</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Voici le code du test avec tous les decorators :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">  @Test
+  public void givenTurnover_whenComposingAllDecoratorsWithFluentStyle_thenCorrectResult() {
+
+    // Given.
+    final double turnover = 100000;
+
+    // When.
+    final double profit = FluentDecorator
+                            .from(turnover)
+                            .with(Expenses::getTransportExpenses)
+                            .with(Expenses::getOperatingExpenses)
+                            .with(Expenses::getDeductibleTaxes)
+                            .with(Expenses::getRemuneration)
+                            .with(Expenses::getExceptionalExpenses)
+                            .calculate();
+
+    // Then.
+    assertThat(profit).isNotNull().isEqualTo(32600);
+  }</code></pre>
+</div>
+</div>
+<div class="paragraph">
+<p>Le test sans le decorator "ExceptionalExpenses" :</p>
+</div>
+<div class="listingblock">
+<div class="content">
+<pre class="highlightjs highlight"><code class="language-java" data-lang="java">  @Test
+  public void givenTurnover_whenNotComposingAllDecoratorsWithFluentStyle_thenCorrectResult() {
+
+    // Given.
+    final double turnover = 100000;
+
+    // When.
+    final double profit = FluentDecorator
+                            .from(turnover)
+                            .with(Expenses::getTransportExpenses)
+                            .with(Expenses::getOperatingExpenses)
+                            .with(Expenses::getDeductibleTaxes)
+                            .with(Expenses::getRemuneration)
+                            .calculate();
+
+    // Then.
+    assertThat(profit).isNotNull().isEqualTo(34600);
+  }</code></pre>
+</div>
+</div>
+</div>
+</div>
+<div class="sect1">
+<h2 id="_3_conclusion">3) Conclusion</h2>
+<div class="sectionbody">
+<div class="paragraph">
+<p>Cet article montre à quel point les lambdas et les fonctions, apportent au programme et aux développeurs. Le code en devient plus concis, expressif et paramètrable.<br>
+De plus la programmation fonctionnelle est orientée composition, ce qui rend le code élégant, maintenable, évolutif et très compréhensible.</p>
+</div>
+<div class="paragraph">
+<p>Un des principes des pattern du GOF est de "favoriser la composition à l&#8217;héritage", cependant on constate que pas mal d&#8217;entre eux sont orientés héritage, ce qui provoque pas mal de problèmes :<br>
+- Le moindre changement des objets parents, provoque un code, qui ne fonctionne plus pour les éléments qui en héritent.<br>
+- Le code n&#8217;est pas évolutif.<br>
+- Le code est verbeux.<br></p>
+</div>
+<div class="paragraph">
+<p>Les lambdas et fonctions permettent de donner beaucoup plus de possibiltés au développeur lorsqu&#8217;il fait sa conception de code. Certains pattern du GOF deviennent obsolètes et peuvent être revisités très élégamment en Java 8.</p>
+</div>
+<div class="paragraph">
+<p>Le code présenté dans cet article est accessible via les liens github suivants :<br>
+<a href="https://github.com/tosun-si/java8-example" class="bare">https://github.com/tosun-si/java8-example</a></p>
+</div>
+<div class="paragraph">
+<p>Java 7 :<br>
+<a href="https://github.com/tosun-si/java8-example/tree/master/src/main/java/com/tosunsi/example/designpattern/java7/decorator" class="bare">https://github.com/tosun-si/java8-example/tree/master/src/main/java/com/tosunsi/example/designpattern/java7/decorator</a>
+<a href="https://github.com/tosun-si/java8-example/blob/master/src/test/java/com/tosunsi/example/designpattern/java7/decorator/DecoratorJava7Test.java" class="bare">https://github.com/tosun-si/java8-example/blob/master/src/test/java/com/tosunsi/example/designpattern/java7/decorator/DecoratorJava7Test.java</a></p>
+</div>
+<div class="paragraph">
+<p>Java 8 :<br>
+<a href="https://github.com/tosun-si/java8-example/tree/master/src/main/java/com/tosunsi/example/designpattern/java8/decorator" class="bare">https://github.com/tosun-si/java8-example/tree/master/src/main/java/com/tosunsi/example/designpattern/java8/decorator</a>
+<a href="https://github.com/tosun-si/java8-example/blob/master/src/test/java/com/tosunsi/example/designpattern/java8/decorator/DecoratorJava8Test.java" class="bare">https://github.com/tosun-si/java8-example/blob/master/src/test/java/com/tosunsi/example/designpattern/java8/decorator/DecoratorJava8Test.java</a></p>
+</div>
+</div>
+</div>]]></description><link>https://tosun-si.github.io/2017/04/26/Pattern-Decorator-revisite-en-Java-8.html</link><guid isPermaLink="true">https://tosun-si.github.io/2017/04/26/Pattern-Decorator-revisite-en-Java-8.html</guid><pubDate>Wed, 26 Apr 2017 00:00:00 GMT</pubDate></item><item><title><![CDATA[Fluent iterable Java 8]]></title><description><![CDATA[<div class="sect1">
 <h2 id="_1_introduction">1) Introduction</h2>
 <div class="sectionbody">
 <div class="paragraph">
