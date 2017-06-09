@@ -6,7 +6,7 @@
   },
   "site": {
     "title": "Mazlum TOSUN BLOG",
-    "description": "Articles sur Java, JEE et autres...",
+    "description": "Articles sur Java, JEE et autres... Posts.on(article).with(Article::getJava8).and(others).by(Author::me)",
     "cover": "/images/my_background.jpg",
     "disqus": "mazlum-tosun"
   },
