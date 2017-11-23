@@ -8,8 +8,9 @@ The goal of this article is to talk about one of the well known GOF pattern, tha
 It corresponds to a behavioural pattern.
 
 For summary, the idea of this pattern is to add some behaviour to code at runtime. +
-Ce pattern présente de nombreux avantages, car dès lors que la conception est mise en place, il devient très simple d'ajouter du comportement au code existant, ce qui le rend très évolutif.
+This pattern has many advantages, because after the conception was finished, it become very easy to add behaviour to existing code, witch makes the code very scalable.
 
+Before Java 8, despite the interesting aspect mentioned previously, this pattern was not very used because the code needed to set it up was very verbose. +
 Avant Java 8, malgré l'aspect intéressant évoqué précédement, ce pattern n'était pas beaucoup utilisé car le code nécessaire à sa mise en place était très verbeux. +
 En effet le design de code était basé sur l'héritage, ce qui obligeait le développeur à écrire une classe par décorator, ainsi qu'une interface accompagnée d'une classe abstraite. La verbosité induite par ce type de dévéloppement pouvait décourager pas mal de développeurs.
 
